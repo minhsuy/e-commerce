@@ -4,6 +4,7 @@ import {
   deleteProduct,
   getProduct,
   getProducts,
+  ratings,
   updateProduct,
 } from "../controllers/productController.js";
 import { isAdmin, verifyAccessToken } from "../middlewares/verifyToken.js";
@@ -14,6 +15,9 @@ productRouter.post("/", verifyAccessToken, isAdmin, createProduct);
 
 // get all products
 productRouter.get("/", getProducts);
+
+// rating
+productRouter.put("/ratings", verifyAccessToken, ratings);
 
 // updated product
 
