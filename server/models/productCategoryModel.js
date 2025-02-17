@@ -8,6 +8,11 @@ const productCategorySchema = new mongoose.Schema(
       unique: true,
       index: true,
     },
+    brand: {
+      type: Array,
+      required: true,
+      index: true,
+    },
   },
   { timestamps: true }
 );

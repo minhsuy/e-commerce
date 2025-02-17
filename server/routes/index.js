@@ -3,6 +3,7 @@ import blogCategoryRouter from "./blogCategoryRouter.js";
 import blogRouter from "./blogRouter.js";
 import brandRouter from "./brandRouter.js";
 import couponRouter from "./couponRouter.js";
+import insert from "./insert.js";
 import orderRouter from "./orderRouter.js";
 import productCategoryRouter from "./productCategoryRouter.js";
 import productRouter from "./productRouter.js";
@@ -17,4 +18,5 @@ export const initRoutes = (app) => {
   app.use("/api/brand", brandRouter);
   app.use("/api/coupon", couponRouter);
   app.use("/api/order", orderRouter);
+  app.use("/api/insert", insert);
 };
