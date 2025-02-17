@@ -147,3 +147,20 @@ export const ratings = asyncHandler(async (req, res) => {
     .status(200)
     .json({ success: true, message: "Rating successfully!" });
 });
+
+export const uploadImagesProduct = asyncHandler(async (req, res) => {
+  const { pid } = req.params;
+  if (!req.files) throw new Error("Missing inputs");
+  if (!pid) throw new Error("Missing product id");
+  const response = await Product.findByIdAndUpdate(
+    pid,
+    {
+      $push: { images: { $each: req.files.map((item) => item.path) } },
+    },
+    { new: true }
+  );
+  return res.status(200).json({
+    success: response ? true : false,
+    updatedProduct: response ? response : "Can not updated",
+  });
+});

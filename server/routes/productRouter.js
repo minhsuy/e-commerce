@@ -6,9 +6,10 @@ import {
   getProducts,
   ratings,
   updateProduct,
+  uploadImagesProduct,
 } from "../controllers/productController.js";
 import { isAdmin, verifyAccessToken } from "../middlewares/verifyToken.js";
-
+import uploadCloud from "../config/cloudinary.config.js";
 const productRouter = express.Router();
 // create a new product
 productRouter.post("/", verifyAccessToken, isAdmin, createProduct);
@@ -22,6 +23,14 @@ productRouter.put("/ratings", verifyAccessToken, ratings);
 // updated product
 
 productRouter.put("/:pid", verifyAccessToken, isAdmin, updateProduct);
+// upload image
+productRouter.put(
+  "/uploadimage/:pid",
+  verifyAccessToken,
+  isAdmin,
+  uploadCloud.array("images", 10),
+  uploadImagesProduct
+);
 
 // delete product
 

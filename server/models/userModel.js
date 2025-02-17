@@ -30,11 +30,17 @@ const userSchema = new mongoose.Schema(
       default: "user",
       required: true,
     },
-    cart: {
-      type: Array,
-      default: [],
+    cart: [
+      {
+        product: { type: mongoose.Types.ObjectId, ref: "Product" },
+        quantity: Number,
+        color: String,
+      },
+    ],
+    address: {
+      type: String,
+      lowercase: true,
     },
-    address: [{ type: mongoose.Types.ObjectId, ref: "Address" }],
     wishlist: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
     isBlocked: {
       type: Boolean,

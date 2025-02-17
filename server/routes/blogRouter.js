@@ -8,7 +8,9 @@ import {
   getBlogs,
   likeBlog,
   updateBlog,
+  uploadImageBlog,
 } from "../controllers/blogController.js";
+import uploadCloud from "../config/cloudinary.config.js";
 
 const blogRouter = express.Router();
 // create a new blog
@@ -28,10 +30,19 @@ blogRouter.put("/:bid", verifyAccessToken, isAdmin, updateBlog);
 blogRouter.delete("/:bid", verifyAccessToken, isAdmin, deleteBlog);
 
 // like blog
-blogRouter.put("/like/:bid", verifyAccessToken, likeBlog);
+blogRouter.put("/likes/:bid", verifyAccessToken, likeBlog);
 
 //dislike blog
 
 blogRouter.put("/dislike/:bid", verifyAccessToken, dislikeBlog);
+
+// update image
+blogRouter.put(
+  "/image/:bid",
+  verifyAccessToken,
+  isAdmin,
+  uploadCloud.single("image"),
+  uploadImageBlog
+);
 
 export default blogRouter;

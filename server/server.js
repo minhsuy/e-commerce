@@ -4,6 +4,7 @@ import dbConnect from "./config/dbconnect.js";
 import usersRouter from "./routes/userRoutes.js";
 import { initRoutes } from "./routes/index.js";
 import { errHandler, notFound } from "./middlewares/errorHandler.js";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -14,6 +15,12 @@ dbConnect();
 const port = process.env.PORT || 8888;
 
 app.use(express.json());
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://localhost:4000"],
+  })
+);
 app.use(express.urlencoded({ extended: true }));
 initRoutes(app);
 app.use(notFound);

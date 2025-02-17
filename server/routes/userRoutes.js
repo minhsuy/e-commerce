@@ -9,7 +9,9 @@ import {
   refreshAccessToken,
   registerController,
   resetPassword,
+  updateCart,
   updateUser,
+  updateUserAddress,
   updateUserByAdmin,
 } from "../controllers/userController.js";
 import {
@@ -51,6 +53,13 @@ usersRouter.delete("/", verifyAccessToken, isAdmin, deleteUser);
 
 //update user : user
 usersRouter.put("/current", verifyAccessToken, updateUser);
+
+// update address
+
+usersRouter.put("/address", verifyAccessToken, updateUserAddress);
+
+// update cart
+usersRouter.put("/cart", verifyAccessToken, updateCart);
 
 // update user : admin role
 usersRouter.put("/:uid", verifyAccessToken, isAdmin, updateUserByAdmin);

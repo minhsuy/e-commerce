@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { sendMail } from "../utils/sendEmail.js";
 import crypto from "crypto";
+import { truncate } from "fs";
 dotenv.config();
 // regiter user
 export const registerController = asyncHandler(async (req, res) => {
@@ -193,4 +194,82 @@ export const updateUserByAdmin = asyncHandler(async (req, res) => {
     success: response ? true : false,
     updatedUser: response ? response : "Something went wrong",
   });
+});
+export const updateUserAddress = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { address } = req.body;
+  if (!address) throw new Error("Missing address !");
+  // const user = await User.findById(_id);
+  // const checkAddressExisxting = user.address.find((item) => item === address);
+  // if (checkAddressExisxting) {
+  //   throw new Error("Address already exsiting !");
+  // }
+  const response = await User.findByIdAndUpdate(
+    _id,
+    { $push: { address } },
+    {
+      new: true,
+    }
+  ).select("-password -role -refreshToken");
+  return res.status(200).json({
+    success: response ? true : false,
+    updatedUser: response ? response : "Something went wrong",
+  });
+});
+export const updateCart = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { pid, quantity, color } = req.body;
+  if (!pid || !quantity || !color) throw new Error("Missing inputs");
+
+  const user = await User.findById(_id);
+  if (!user) throw new Error("User not found!");
+
+  const productExistingOnCart = user?.cart?.find(
+    (item) => item.product.toString() === pid
+  );
+
+  if (productExistingOnCart) {
+    if (productExistingOnCart.color === color) {
+      const response = await User.findOneAndUpdate(
+        { _id, "cart.product": pid, "cart.color": productExistingOnCart.color },
+        {
+          $set: {
+            "cart.$.quantity": quantity + productExistingOnCart.quantity,
+          },
+        },
+        { new: true }
+      );
+      return res.status(200).json({
+        success: true,
+        message: "Cart updated successfully",
+        cart: response.cart,
+      });
+    } else {
+      const response = await User.findByIdAndUpdate(
+        _id,
+        {
+          $push: { cart: { product: pid, quantity, color } },
+        },
+        { new: true }
+      );
+      return res.status(200).json({
+        success: response ? true : false,
+        message: "Product Add To Cart successfully",
+        response,
+      });
+    }
+  } else {
+    const response = await User.findByIdAndUpdate(
+      _id,
+      {
+        $push: { cart: { product: pid, quantity, color } },
+      },
+      { new: true }
+    );
+    return res.status(200).json({
+      success: response ? true : false,
+      message: "Product Add To Cart successfully",
+      response,
+    });
+  }
 });

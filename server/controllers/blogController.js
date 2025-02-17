@@ -146,3 +146,20 @@ export const deleteBlog = asyncHandler(async (req, res) => {
     message: blog ? "Delete Successfully" : "Delete Failed",
   });
 });
+
+//upload image
+
+export const uploadImageBlog = asyncHandler(async (req, res) => {
+  const { bid } = req.params;
+  if (!bid) throw new Error("Missing blog id!");
+  if (!req.file) throw new Error("Missing image!");
+  const response = await Blog.findByIdAndUpdate(
+    bid,
+    { image: req.file.path },
+    { new: true }
+  );
+  return res.status(200).json({
+    message: response ? "Update image Successfully" : "Updated image Failed",
+    response: response ? response : "Not found !",
+  });
+});
