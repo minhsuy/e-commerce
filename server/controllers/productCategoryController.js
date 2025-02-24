@@ -13,9 +13,9 @@ export const createCategory = asyncHandler(async (req, res) => {
   });
 });
 export const getCategories = asyncHandler(async (req, res) => {
-  const result = await ProductCategory.find().select("-createdAt -updatedAt");
+  const result = await ProductCategory.find();
   return res.status(200).json({
-    message: result ? "Sucess" : "Failed",
+    message: result ? "Success" : "Failed",
     result,
   });
 });

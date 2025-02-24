@@ -15,12 +15,7 @@ dbConnect();
 const port = process.env.PORT || 8888;
 
 app.use(express.json());
-app.use(
-  cors({
-    credentials: true,
-    origin: ["http://localhost:4000"],
-  })
-);
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 initRoutes(app);
 app.use(notFound);

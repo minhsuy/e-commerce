@@ -34,6 +34,8 @@ const fn = async (product) => {
     color:
       product?.variants?.find((el) => el.label === "Color")?.variants?.[0] ||
       "N/A",
+    thumb: product?.thumb,
+    totalRatings: Math.round(Math.random() * 5),
   });
 };
 
@@ -53,6 +55,7 @@ const fn2 = async (cate) => {
   await ProductCategory.create({
     title: cate?.cate,
     brand: cate?.brand,
+    image: cate?.image,
   });
 };
 export const insertCategory = asyncHandler(async (req, res) => {
