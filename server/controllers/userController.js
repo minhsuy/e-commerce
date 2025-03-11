@@ -9,24 +9,54 @@ import dotenv from "dotenv";
 import { sendMail } from "../utils/sendEmail.js";
 import crypto from "crypto";
 import { truncate } from "fs";
+import makeToken from "uniqid";
 dotenv.config();
-// regiter user
+
+// register with email verify
+
 export const registerController = asyncHandler(async (req, res) => {
-  const { email, password, firstname, lastname } = req.body;
-  if (!email || !password || !firstname || !lastname)
+  const { email, password, firstname, lastname, mobile } = req.body;
+  if (!email || !password || !firstname || !lastname || !mobile)
     return res.status(400).json({
       success: false,
       message: "Missing inputs",
     });
   const user = await User.findOne({ email });
-  if (user) {
-    throw new Error("Email already exists!");
+  if (user) throw new Error("Email này đã tồn tại  , hãy chọn email khác !");
+  else {
+    const newUser = await User.create({
+      email,
+      password,
+      firstname,
+      lastname,
+      mobile,
+    });
+    const registerToken = newUser.createRegisterToken();
+    await newUser.save();
+    const html = `Xin vui lòng click vào link dưới đây để hoàn tất quá trình đăng ký email  .Link sẽ hết hạn sau 15p. <a href=${process.env.URL_SERVER}/api/user/finalregister/${registerToken}>Click here</a>`;
+    const data = {
+      email,
+      html,
+      subject: "Xác thực email",
+    };
+    await sendMail(data);
+    return res.json({
+      success: true,
+      message: "Vui lòng kiểm tra email để xác thực đăng ký !",
+    });
   }
-  const newUser = await User.create(req.body);
-  return res.status(200).json({
-    data: newUser ? true : false,
-    message: newUser ? "Register succesfully !" : "Register failed !",
-  });
+});
+
+export const finalregister = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+  const verifyToken = crypto.createHash("sha256").update(token).digest("hex");
+  const user = await User.findOne({ registerToken: verifyToken });
+  if (!user) {
+    return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
+  }
+  user.registerToken = "";
+  await user.save();
+  return res.redirect(`${process.env.CLIENT_URL}/finalregister/success`);
 });
 
 // login user
@@ -44,23 +74,27 @@ export const loginController = asyncHandler(async (req, res) => {
   if (!user) {
     throw new Error("User not found!");
   }
-
-  const isMatch = await user.isCorrectPassword(password);
-  if (!isMatch) {
-    throw new Error("Wrong password!");
+  if (user.registerToken !== "") {
+    throw new Error("Please verify your email");
   } else {
-    const { _id, password, role, ...userData } = user.toObject();
-    const refreshToken = await generateRefreshToken({ _id: _id });
-    const accessToken = await generateAccessToken({ _id: _id, role });
-    await User.findByIdAndUpdate(_id, { refreshToken }, { new: true });
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-    return res.status(200).json({
-      message: "Login successfully!",
-      accessToken,
-    });
+    const isMatch = await user.isCorrectPassword(password);
+    if (!isMatch) {
+      throw new Error("Wrong password!");
+    } else {
+      const { _id, password, role, ...userData } = user.toObject();
+      const refreshToken = await generateRefreshToken({ _id: _id });
+      const accessToken = await generateAccessToken({ _id: _id, role });
+      await User.findByIdAndUpdate(_id, { refreshToken }, { new: true });
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+      return res.status(200).json({
+        message: "Login successfully!",
+        accessToken,
+        userData: userData ? userData : false,
+      });
+    }
   }
 });
 export const getCurrent = asyncHandler(async (req, res) => {
@@ -112,21 +146,22 @@ export const logOut = asyncHandler(async (req, res) => {
   5 . check token có giống vs token mà server gửi mail hay không
 */
 export const forgotPassword = asyncHandler(async (req, res) => {
-  const { email } = req.query;
+  const { email } = req.body;
   if (!email) throw new Error("Missing email address !");
   const user = await User.findOne({ email });
   if (!user) throw new Error("User not found !");
   const resetToken = user.createPasswordChangedToken();
   await user.save();
-  const html = `Xin vui lòng click vào link dưới đây để  thay đổi mật khẩu của bạn.Link sẽ hết hạn sau 15p. <a href=${process.env.URL_SERVER}/api/user/reset-password/${resetToken}>Click here</a>`;
+  const html = `Xin vui lòng click vào link dưới đây để  thay đổi mật khẩu của bạn.Link sẽ hết hạn sau 15p. <a href=${process.env.CLIENT_URL}/reset-password/${resetToken}>Click here</a>`;
   const data = {
     email,
     html,
+    subject: "Forgot password",
   };
   const rs = await sendMail(data);
   return res.status(200).json({
     success: rs ? true : false,
-    rs,
+    message: rs ? "Hãy check mail của bạn !" : "Đã bị lỗi , hãy thử lại sau !",
   });
 });
 export const resetPassword = asyncHandler(async (req, res) => {

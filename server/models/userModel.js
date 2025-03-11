@@ -58,6 +58,12 @@ const userSchema = new mongoose.Schema(
     passwordResetExpires: {
       type: String,
     },
+    registerToken: {
+      type: String,
+    },
+    avatar: {
+      type: String,
+    },
   },
   {
     timestamps: true,
@@ -85,6 +91,14 @@ userSchema.methods = {
       .digest("hex");
     this.passwordResetExpires = Date.now() + 15 * 60 * 1000;
     return resetToken;
+  },
+  createRegisterToken: function () {
+    const registerToken = crypto.randomBytes(32).toString("hex");
+    this.registerToken = crypto
+      .createHash("sha256")
+      .update(registerToken)
+      .digest("hex");
+    return registerToken;
   },
 };
 const User = mongoose.model("User", userSchema);

@@ -1,6 +1,7 @@
 import express from "express";
 import {
   deleteUser,
+  finalregister,
   forgotPassword,
   getCurrent,
   getUsers,
@@ -23,6 +24,7 @@ import {
 const usersRouter = express.Router();
 // register user
 usersRouter.post("/register", registerController);
+usersRouter.get("/finalregister/:token", finalregister);
 
 // login user
 usersRouter.post("/login", loginController);
@@ -39,7 +41,7 @@ usersRouter.post("/refreshtoken", verifyRefreshToken, refreshAccessToken);
 usersRouter.post("/logout", verifyRefreshToken, logOut);
 
 // forgot password
-usersRouter.get("/forgotpassword", forgotPassword);
+usersRouter.post("/forgotpassword", forgotPassword);
 
 // reset password
 usersRouter.put("/resetpassword", resetPassword);

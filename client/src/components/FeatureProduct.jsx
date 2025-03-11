@@ -1,11 +1,12 @@
 import React, { memo, useEffect, useState } from 'react';
 import { apiGetProducts } from '../apis/product';
 import ProductCard from './ProductCard';
+import { Link } from 'react-router-dom';
 
 const FeatureProduct = () => {
     const [products, setProducts] = useState(null)
     const fetchProduct = async () => {
-        const response = await apiGetProducts({ limit: 9, totalRatings: { gt: 3 } });
+        const response = await apiGetProducts({ limit: 9 });
         if (response.success) {
             setProducts(response.data)
         }
@@ -18,10 +19,13 @@ const FeatureProduct = () => {
             <h3 className='font-semibold text-xl py-[15px] border-b-2 border-main'>FEATURE PRODUCTS</h3>
             <div className='flex flex-wrap mt-5 mx-[-10px] border border-gray-200 rounded-sm gap-y-2'>
                 {products && products.map((item) => (
+
                     <ProductCard key={item._id} image={item.thumb}
                         title={item.title}
+                        category={item.category}
                         totalRatings={item.totalRatings}
                         price={item.price}
+                        id={item._id}
                     ></ProductCard>
                 ))}
             </div>

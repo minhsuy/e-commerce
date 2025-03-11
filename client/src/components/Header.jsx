@@ -25,11 +25,13 @@ const Header = () => {
                     </span>
                     <span>Online Support 24/7</span>
                 </div>
-                <div className='flex items-center justify-center gap-2 px-6 border-r '>
-                    <IoBagHandleSharp className='text-main text-xl'></IoBagHandleSharp>
+                <div className='flex items-center justify-center gap-2 px-6 border-r cursor-pointer '>
+                    <IoBagHandleSharp className='text-main text-3xl'></IoBagHandleSharp>
                     <span>0 item(s)</span>
                 </div>
-                <div className='flex items-center justify-center px-6'><FaUserCircle className='text-3xl text-gray-500'></FaUserCircle></div>
+                <div className='flex items-center justify-center px-6 gap-x-2 cursor-pointer'><FaUserCircle className='text-3xl text-main'></FaUserCircle>
+                    <span className='font-semibold '>Profile</span>
+                </div>
             </div>
         </div>
     );

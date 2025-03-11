@@ -2,7 +2,7 @@ import React, { useEffect, useState, memo } from 'react';
 import { icons } from '../utils/icons';
 import { apiGetProducts } from '../apis/product';
 import { formatMoney } from "../utils/helper";
-
+import { Link } from 'react-router-dom'
 import { renderStarFromNumber } from '../utils/renderToStar'
 import Countdown from './Countdown';
 const DealDaily = () => {
@@ -15,7 +15,6 @@ const DealDaily = () => {
     const fetchDailyDeal = async () => {
         const response = await apiGetProducts({
             limit: 7,
-            totalRatings: 5
         })
         if (response.success) {
             setDailyDeal(response.data[Math.round(Math.random() * 6)])
@@ -66,13 +65,17 @@ const DealDaily = () => {
                 </span>
                 <span className='font-bold text-[17px] text-center text-gray-800'>DAILY DEALS</span>
             </div>
-            {dailyDeal && <div className='w-full flex flex-col items-center pt-8 cursor-pointer' key={dailyDeal?._id}>
-                <img src={dailyDeal?.thumb} key={dailyDeal?._id} alt={dailyDeal?.title || "Product"} className="w-full object-contain" />
-                <div className='flex items-center justify-center flex-col gap-y-2 relative top-[-20px] mt-8'>
-                    <span key={dailyDeal?._id} className="line-clamp-1 text-center">{dailyDeal?.title}</span>
-                    <span key={dailyDeal?._id} className="flex">{renderStarFromNumber(dailyDeal?.totalRatings, 18)} </span>
-                    <span key={dailyDeal?._id}>{`${dailyDeal?.price && formatMoney(dailyDeal?.price)} VNĐ`}</span></div>
-            </div>}
+            {dailyDeal && <Link to={`/${dailyDeal?.category?.toLowerCase()}/${dailyDeal?._id}/${dailyDeal.title}`}>
+                <div className='w-full flex flex-col items-center pt-8 cursor-pointer' key={dailyDeal?._id}>
+                    <img src={dailyDeal?.thumb} key={dailyDeal?._id} alt={dailyDeal?.title || "Product"} className="w-full object-contain" />
+                    <div className='flex items-center justify-center flex-col gap-y-2 relative top-[-20px] mt-8'>
+                        <span key={dailyDeal?._id} className="line-clamp-1 text-center">{dailyDeal?.title}</span>
+                        <span key={dailyDeal?._id} className="flex">{renderStarFromNumber(dailyDeal?.totalRatings, 18)?.map((el, index) => (
+                            <span key={index}>{el}</span>
+                        ))} </span>
+                        <span key={dailyDeal?._id}>{`${dailyDeal?.price && formatMoney(dailyDeal?.price)} VNĐ`}</span></div>
+                </div>
+            </Link>}
             <div>
                 <div className='flex justify-center items-center gap-x-2 mb-7'>
                     <Countdown unit='Hours' number={hour} ></Countdown>

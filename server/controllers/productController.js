@@ -18,7 +18,13 @@ export const createProduct = asyncHandler(async (req, res) => {
 });
 export const getProduct = asyncHandler(async (req, res) => {
   const { pid } = req.params;
-  const product = await Product.findById(pid);
+  const product = await Product.findById(pid).populate({
+    path: "ratings",
+    populate: {
+      path: "postedBy",
+      select: "firstname lastname avatar",
+    },
+  });
   if (!product)
     return res.status(404).json({
       message: "Product not found !",
@@ -38,12 +44,25 @@ export const getProducts = asyncHandler(async (req, res) => {
     (match) => `$${match}`
   );
 
-  const formatedQueries = JSON.parse(queryString);
+  let formatedQueries = JSON.parse(queryString);
+  let colorQueryObject = {};
   // filter
   if (req.query && req?.query?.title) {
     formatedQueries.title = { $regex: req?.query?.title, $options: "i" };
   }
-  let queryCommand = Product.find(formatedQueries);
+  if (req.query && req?.query?.category) {
+    formatedQueries.category = { $regex: req?.query?.category, $options: "i" };
+  }
+  if (req.query && req?.query?.color) {
+    delete formatedQueries?.color;
+    const colorArr = queries.color?.split(",");
+    const colorQuery = colorArr.map((el) => ({
+      color: { $regex: el, $options: "i" },
+    }));
+    colorQueryObject = { $or: colorQuery };
+  }
+  const q = { ...colorQueryObject, ...formatedQueries };
+  let queryCommand = Product.find(q);
   // sorting
   if (req.query && req.query?.sort) {
     let sorting = req?.query?.sort.split(",").join(" ");
@@ -64,7 +83,7 @@ export const getProducts = asyncHandler(async (req, res) => {
   queryCommand = queryCommand.skip(skip).limit(limit);
   try {
     const response = await queryCommand;
-    const counts = await Product.find(formatedQueries).countDocuments();
+    const counts = await Product.find(q).countDocuments();
     return res.status(200).json({
       success: response ? true : false,
       counts: response ? counts : "0",
@@ -110,7 +129,7 @@ export const deleteProduct = asyncHandler(async (req, res) => {
 });
 export const ratings = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { star, comment, pid } = req.body;
+  const { star, comment, pid, updatedAt } = req.body;
   if (!star || !pid) throw new Error("Missing inputs !");
 
   const ratingProduct = await Product.findById(pid);
@@ -123,13 +142,18 @@ export const ratings = asyncHandler(async (req, res) => {
     await Product.updateOne(
       { _id: pid, "ratings.postedBy": _id },
       {
-        $set: { "ratings.$.star": star, "ratings.$.comment": comment },
-      }
+        $set: {
+          "ratings.$.star": star,
+          "ratings.$.comment": comment,
+          "ratings.$.updatedAt": updatedAt,
+        },
+      },
+      { new: true }
     );
   } else {
     await Product.findByIdAndUpdate(
       pid,
-      { $push: { ratings: { star, comment, postedBy: _id } } },
+      { $push: { ratings: { star, comment, postedBy: _id, updatedAt } } },
       { new: true }
     );
   }
@@ -145,11 +169,12 @@ export const ratings = asyncHandler(async (req, res) => {
   await updatedProduct.save();
   return res
     .status(200)
-    .json({ success: true, message: "Rating successfully!" });
+    .json({ success: true, message: "Rating successfully!", updatedProduct });
 });
 
 export const uploadImagesProduct = asyncHandler(async (req, res) => {
   const { pid } = req.params;
+  console.log(pid);
   if (!req.files) throw new Error("Missing inputs");
   if (!pid) throw new Error("Missing product id");
   const response = await Product.findByIdAndUpdate(

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/Sidebar';
+import React, { memo, useEffect, useState } from 'react';
 import Banner from '../../components/Banner';
 import { apiGetProducts } from '../../apis/product';
 import BestSeller from '../../components/BestSeller';
@@ -10,7 +9,7 @@ import Product from '../../components/Product'
 import CustomSlider from '../../components/CustomSlider';
 import { useDispatch, useSelector } from 'react-redux';
 import { icons } from '../../utils/icons';
-
+import Sidebar from '../../components/Sidebar';
 const settings = {
     dots: false,
     infinite: true,
@@ -28,7 +27,7 @@ const Home = () => {
             <div className='w-main flex'>
                 <div className='flex flex-col gap-5 w-[25%] flex-auto'>
                     <Sidebar></Sidebar>
-                    <DealDaily></DealDaily>
+                    {/* <DealDaily></DealDaily> */}
                 </div>
                 <div className='flex flex-col gap-5 pl-5 w-[75%] flex-auto'>
                     <Banner></Banner>
@@ -77,4 +76,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default memo(Home);

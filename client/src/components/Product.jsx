@@ -8,12 +8,12 @@ import SelectOption from "./SelectOption";
 import { icons } from "../utils/icons";
 import { Link } from 'react-router-dom'
 import path from '../utils/path'
-const Product = ({ productData, tag, isCheck }) => {
+const Product = ({ productData, tag, isCheck, normal }) => {
     const { LuMenu, FaEye, FaHeart } = icons
     const [isShowOption, setIsShowOption] = useState(false)
     return (
         <div className="w-full text-base  px-[10px]">
-            <Link to={`/${path.DETAIL_PRODUCT}/${productData?._id}/${productData.title}`} className="border border-gray-300 rounded-md p-[15px] cursor-pointer flex flex-col items-center"
+            <Link to={`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData.title}`} className="border border-gray-300 rounded-md p-[15px] cursor-pointer flex flex-col items-center"
                 onMouseEnter={e => {
                     e.stopPropagation()
                     setIsShowOption(true)
@@ -31,8 +31,13 @@ const Product = ({ productData, tag, isCheck }) => {
                         <SelectOption icon={<FaHeart></FaHeart>}></SelectOption>
                     </div>}
                     <img src={productData?.thumb} alt={productData?.title || "Product"} className="w-[243px] h-[243px] object-cover" />
-                    {isCheck ? "" : <img src={tag ? label : trending} alt="" className={`absolute w-[75px]
-                        top-[-10px] object-cover`} />}
+                    {(isCheck || normal) ? "" : (
+                        <img
+                            src={tag ? label : trending}
+                            alt=""
+                            className="absolute w-[75px] top-[-10px] object-cover"
+                        />
+                    )}
                 </div>
                 <div className="flex flex-col items-center gap-2 mt-[15px]">
                     <span className="flex">{renderStarFromNumber(productData?.totalRatings)?.map((item, index) => (
@@ -54,11 +59,13 @@ Product.propTypes = {
         price: PropTypes.number,
         tag: PropTypes.string,
         totalRatings: PropTypes.number,
-        _id: PropTypes.number
+        _id: PropTypes.number,
+        category: PropTypes.string
 
     }).isRequired,
     tag: PropTypes.string,
     isCheck: PropTypes.string,
+    normal: PropTypes.string,
 };
 
 export default Product;

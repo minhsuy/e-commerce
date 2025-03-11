@@ -12,26 +12,48 @@ import FAQ from './pages/public/FAQ.JSX';
 import Services from './pages/public/Services';
 import Contact from './pages/public/Contact';
 import Products from './pages/public/Products';
+import FinalRegister from './pages/public/FinalRegister';
+import ResetPassword from './pages/public/ResetPassword';
+import { Bounce, ToastContainer } from 'react-toastify';
+import Modal from './components/Modal';
 function App() {
   const dispath = useDispatch()
   useEffect(() => {
     dispath(getCategories())
   }, [])
+  const { isShowModal, modalChildren } = useSelector((state) => state.app)
   return (
-    <div className="min-h-screen font-main">
+    <div className="font-main relative">
+      {isShowModal && <Modal>{modalChildren}</Modal>}
       <Routes>
         <Route path={path.PUBLIC} element={<Public />}>
           <Route path={path.HOME} element={<Home />}></Route>
           <Route path={path.BLOGS} element={<Blogs />}></Route>
           <Route path={path.PRODUCTS} element={<Products />}></Route>
-          <Route path={path.DETAIL_PRODUCT__PID__TITLE} element={<DetailProduct />}></Route>
+          <Route path={path.DETAIL_PRODUCT__CATEGORY__PID__TITLE} element={<DetailProduct />}></Route>
           <Route path={path.FAQ} element={<FAQ />}></Route>
           <Route path={path.OUR_SERVICES} element={<Services />}></Route>
+          <Route path={path.RESET_PASSWORD} element={<ResetPassword />}></Route>
           <Route path={path.CONTACT} element={<Contact />}></Route>
+
         </Route>
+        <Route path={path.FINAL_REGISTER} element={<FinalRegister />}></Route>
         <Route path={path.LOGIN} element={<Login />}></Route>
 
       </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </div>
   )
 }

@@ -11,7 +11,7 @@ const settings = {
     slidesToScroll: 1
 };
 
-const CustomSlider = ({ products, activedTab }) => {
+const CustomSlider = ({ products, activedTab, normal }) => {
     return (
         <>
             {products && <Slider {...settings}>
@@ -22,6 +22,7 @@ const CustomSlider = ({ products, activedTab }) => {
                         tag={activedTab === 1}
                         isCheck={activedTab === 3}
                         key={item._id}
+                        normal={normal}
                     />
                 ))}
             </Slider>}
@@ -36,10 +37,12 @@ CustomSlider.propTypes = {
         thumb: PropTypes.string,
         price: PropTypes.number,
         tag: PropTypes.string,
+
         totalRatings: PropTypes.number,
     })).isRequired,
     activedTab: PropTypes.number.isRequired,
-    isCheck: PropTypes.number
+    isCheck: PropTypes.number,
+    normal: PropTypes.bool,
 };
 
 export default memo(CustomSlider);

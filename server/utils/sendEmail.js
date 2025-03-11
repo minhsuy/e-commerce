@@ -4,11 +4,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const sendMail = asyncHandler(async ({ email, html }) => {
+export const sendMail = asyncHandler(async ({ email, html, subject }) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 465, // Dùng SSL
-    secure: true, // Bắt buộc true khi dùng port 465
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL_NAME,
       pass: process.env.EMAIL_APP_PASSWORD,
@@ -18,7 +18,7 @@ export const sendMail = asyncHandler(async ({ email, html }) => {
   const info = await transporter.sendMail({
     from: `"Cuahangdientu" <${process.env.EMAIL_NAME}>`,
     to: email,
-    subject: "Forgot password",
+    subject,
     html: html,
   });
 

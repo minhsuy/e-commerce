@@ -13,8 +13,8 @@ button.slick-next::before {
   color: gray;
   content: "\276f";
   display: block;
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   background-color: #ffd3d3;
   font-size: 32px;
   display: flex;
@@ -26,12 +26,28 @@ button.slick-prev::before {
   color: gray;
   content: "\276E";
   display: block;
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 5px;
   background-color: #ffd3d3;
   font-size: 32px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.my-masonry-grid {
+  display: -webkit-box; /* Not needed if autoprefixing */
+  display: -ms-flexbox; /* Not needed if autoprefixing */
+  display: flex;
+  margin-left: -30px; /* gutter size offset */
+  width: auto;
+}
+.my-masonry-grid_column {
+  background-clip: padding-box;
+}
+
+/* Style your items */
+.my-masonry-grid_column > div {
+  /* change div to reference your elements you put in <Masonry> */
+  margin-bottom: 30px;
 }

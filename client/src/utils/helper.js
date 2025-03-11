@@ -9,3 +9,63 @@ export const createSlug = (string) =>
 export const formatMoney = (number) => {
   return Number(number.toFixed(1)).toLocaleString();
 };
+export const validate = (payload, setInvalidFields) => {
+  let invalidsCount = 0;
+  const invalidFields = Object.entries(payload);
+  ("key : value");
+  setInvalidFields([]);
+  for (let arr of invalidFields) {
+    if (arr[1].trim() === "") {
+      invalidsCount++;
+      setInvalidFields((prev) => [
+        ...prev,
+        { name: arr[0], message: `${arr[0].toUpperCase()} is required` },
+      ]);
+    }
+  }
+
+  for (let arr of invalidFields) {
+    switch (arr[0]) {
+      case "email":
+        if (
+          !String(arr[1])
+            .toLowerCase()
+            .match(
+              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            )
+        ) {
+          invalidsCount++;
+          setInvalidFields((prev) => [
+            ...prev,
+            { name: arr[0], message: " Email is invalid" },
+          ]);
+        }
+        break;
+      case "password":
+        if (arr[1].length < 6) {
+          invalidsCount++;
+          setInvalidFields((prev) => [
+            ...prev,
+            { name: arr[0], message: " must be 6 characters" },
+          ]);
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  return invalidsCount;
+};
+
+export const formatPrice = (number) => {
+  return Math.round(number / 1000) * 1000;
+};
+
+export const generateRange = (start, end) => {
+  let value = [];
+  for (let i = start; i < end; i++) {
+    value.push(i);
+  }
+  return value;
+};

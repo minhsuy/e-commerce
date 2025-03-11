@@ -11,6 +11,15 @@ import { FaEye } from "react-icons/fa";
 import { LuMenu } from "react-icons/lu";
 import { FaHeart } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
+import { IoIosLogOut } from "react-icons/io";
+import { MdOutlineLogin } from "react-icons/md";
+import { GoDotFill } from "react-icons/go";
+import { FaShieldAlt } from "react-icons/fa";
+import { MdLocalShipping } from "react-icons/md";
+import { IoIosGift } from "react-icons/io";
+import { FaReply } from "react-icons/fa";
+import { FaTty } from "react-icons/fa";
+import { IoIosArrowDown } from "react-icons/io";
 export const icons = {
   FaPhoneAlt,
   MdEmail,
@@ -25,4 +34,12 @@ export const icons = {
   LuMenu,
   FaHeart,
   IoIosArrowForward,
+  MdOutlineLogin,
+  GoDotFill,
+  FaShieldAlt,
+  MdLocalShipping,
+  IoIosGift,
+  FaReply,
+  FaTty,
+  IoIosArrowDown,
 };

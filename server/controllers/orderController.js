@@ -25,6 +25,7 @@ export const createOrder = asyncHandler(async (req, res) => {
   if (coupon) {
     const checkCoupon = await Coupon.findOne({ name: coupon });
     if (!checkCoupon) throw new Error("Coupon not found!");
+    if (Date.now() > checkCoupon.expiry) throw new Error("Coupon has expired!");
     total =
       Math.round((total * (1 - +checkCoupon.discount / 100)) / 1000) * 1000;
     const response = await Order.create({
