@@ -99,9 +99,7 @@ export const loginController = asyncHandler(async (req, res) => {
 });
 export const getCurrent = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const user = await User.findById({ _id }).select(
-    "-refreshTone -password -role"
-  );
+  const user = await User.findById({ _id }).select("-refreshTone -password ");
   return res.status(200).json({
     message: "Get profile successfully !",
     user,
@@ -188,16 +186,51 @@ export const resetPassword = asyncHandler(async (req, res) => {
 });
 
 export const getUsers = asyncHandler(async (req, res) => {
-  const response = await User.find().select("-refreshToken -password -role");
-  return res.status(200).json({
-    success: response ? true : false,
-    users: response,
-  });
+  const queries = { ...req.query };
+  const excludedFields = ["fields", "sort", "page", "limit"];
+  excludedFields.forEach((item) => delete queries[item]);
+  let queryString = JSON.stringify(queries);
+  queryString = queryString.replace(
+    /\b(gte|gt|lte|lt)\b/g,
+    (match) => `$${match}`
+  );
+  let formatedQueries = JSON.parse(queryString);
+  // filtering
+  if (req?.query?.email) {
+    formatedQueries.email = { $regex: req?.query?.email, $options: "i" };
+  }
+  let queryCommand = User.find(formatedQueries);
+  // sorting
+  if (req.query && req.query?.sort) {
+    let sorting = req?.query?.sort.split(",").join(" ");
+    queryCommand = queryCommand.sort(sorting);
+  }
+  // fields limiting
+  if (req.query && req.query?.fields) {
+    const fields = req.query.fields.split(",").join(" ");
+    queryCommand = queryCommand.select(fields);
+  }
+  const page = +req.query.page || 1;
+  const limit = +req.query.limit || process.env.LIMIT_PRODUCT;
+  const skip = (page - 1) * limit;
+  queryCommand = queryCommand.skip(skip).limit(limit);
+  try {
+    const response = await queryCommand;
+    const counts = await User.find(queryCommand).countDocuments();
+    return res.status(200).json({
+      success: response ? true : false,
+      counts: response ? counts : "0",
+
+      data: response ? response : "No data found",
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
 });
 export const deleteUser = asyncHandler(async (req, res) => {
-  const { _id } = req.query;
-  if (!_id) throw new Error("Missing id user !");
-  const response = await User.findByIdAndDelete(_id);
+  const { uid } = req.params;
+  if (!uid) throw new Error("Missing id user !");
+  const response = await User.findByIdAndDelete(uid);
   return res.status(200).json({
     success: response ? true : false,
     deletedUser: response

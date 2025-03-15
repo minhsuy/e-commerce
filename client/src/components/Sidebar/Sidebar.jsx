@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom'
-import { apiGetCategories } from '../apis/app'
-import { createSlug } from '../utils/helper'
+import { apiGetCategories } from '../../apis/app'
+import { createSlug } from '../../utils/helper'
 import { useSelector } from 'react-redux'
 
 const Sidebar = () => {

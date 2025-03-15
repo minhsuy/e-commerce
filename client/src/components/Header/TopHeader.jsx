@@ -1,20 +1,19 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import path from '../utils/path';
+import path from '../../utils/path';
 import { useDispatch, useSelector } from 'react-redux'
-import { getCurrent } from '../store/user/asyncAction'
-import { icons } from '../utils/icons'
-import { logout } from '../store/user/userSlice'
+import { getCurrent } from '../../store/user/asyncAction'
+import { icons } from '../../utils/icons'
+import { logout } from '../../store/user/userSlice'
 import Swal from 'sweetalert2'
 import { toast } from 'react-toastify';
-import { clearMessage } from '../store/user/userSlice'
+import { clearMessage } from '../../store/user/userSlice'
 import { useNavigate } from 'react-router-dom';
 const TopHeader = () => {
     const navigate = useNavigate()
     const { MdOutlineLogin } = icons
     const dispatch = useDispatch()
     const { isLoggedIn, current, mes } = useSelector(state => state.user)
-    const state = useSelector(state => state.user)
     useEffect(() => {
         if (isLoggedIn) dispatch(getCurrent())
     }, [dispatch, isLoggedIn])

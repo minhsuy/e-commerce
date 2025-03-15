@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, useSearchParams, useNavigate, createSearchParams } from 'react-router-dom'
-import Breadcrumb from '../../components/Breadcrumb';
 import { apiGetProducts } from '../../apis/product';
 import Masonry from 'react-masonry-css'
-import Product from '../../components/Product';
-import SearchItem from '../../components/SearchItem';
-import InputSelect from '../../components/InputSelect';
+import Product from '../../components/Products/Product';
+import InputSelect from '../../components/Inputs/InputSelect';
 import { sorts } from '../../utils/constant';
-import Pagination from '../../components/Pagination';
+import Pagination from '../../components/Pagination/Pagination';
+import Breadcrumb from '../../components/common/Breadcrumb';
+import SearchItem from '../../components/search/SearchItem';
 const breakpointColumnsObj = {
     default: 4,
     1100: 3,
@@ -115,7 +115,6 @@ const Products = () => {
             {products?.data?.length > 0 &&
                 <div className=' my-4 flex justify-end'>
                     <Pagination totalCount={products?.counts}
-                        productNumber={products?.data?.length}
                     ></Pagination>
                 </div>
             }

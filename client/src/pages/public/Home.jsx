@@ -1,15 +1,14 @@
 import React, { memo, useEffect, useState } from 'react';
-import Banner from '../../components/Banner';
 import { apiGetProducts } from '../../apis/product';
-import BestSeller from '../../components/BestSeller';
-import DealDaily from '../../components/DealDaily';
-import FeatureProduct from '../../components/FeatureProduct';
+import BestSeller from '../../components/Products/BestSeller';
+import FeatureProduct from '../../components/Products/FeatureProduct';
 import Slider from "react-slick";
-import Product from '../../components/Product'
-import CustomSlider from '../../components/CustomSlider';
 import { useDispatch, useSelector } from 'react-redux';
 import { icons } from '../../utils/icons';
-import Sidebar from '../../components/Sidebar';
+import Sidebar from '../../components/Sidebar/Sidebar';
+import Banner from '../../components/common/Banner';
+import CustomSlider from '../../components/common/CustomSlider';
+import DealDaily from '../../components/Products/DealDaily';
 const settings = {
     dots: false,
     infinite: true,

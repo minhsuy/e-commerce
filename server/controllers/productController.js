@@ -43,7 +43,6 @@ export const getProducts = asyncHandler(async (req, res) => {
     /\b(gte|gt|lte|lt)\b/g,
     (match) => `$${match}`
   );
-
   let formatedQueries = JSON.parse(queryString);
   let colorQueryObject = {};
   // filter

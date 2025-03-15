@@ -51,7 +51,7 @@ usersRouter.put("/resetpassword", resetPassword);
 usersRouter.get("/", verifyAccessToken, isAdmin, getUsers);
 
 // delete user : admin role
-usersRouter.delete("/", verifyAccessToken, isAdmin, deleteUser);
+usersRouter.delete("/:uid", verifyAccessToken, isAdmin, deleteUser);
 
 //update user : user
 usersRouter.put("/current", verifyAccessToken, updateUser);

@@ -30,7 +30,8 @@ export const verifyRefreshToken = asyncHandler(async (req, res, next) => {
 
 export const isAdmin = asyncHandler((req, res, next) => {
   const { role } = req.user;
-  if (role !== "admin")
+  console.log(role);
+  if (+role !== 0)
     return res.status(401).json({
       success: false,
       message: "REQUIRED ADMIN ROLE !",

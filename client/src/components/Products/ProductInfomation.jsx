@@ -1,17 +1,17 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
-import { productInfoTabs } from '../utils/constant';
-import Votebar from './Votebar';
+import { productInfoTabs } from '../../utils/constant';
 import PropTypes from 'prop-types'
-import { renderStarFromNumber } from '../utils/renderToStar';
-import { apiRatings } from '../apis/product';
+import { renderStarFromNumber } from '../../utils/renderToStar';
+import { apiRatings } from '../../apis/product';
 import { useDispatch, useSelector } from 'react-redux';
-import Button from './Button';
+import Button from '../Button/Button';
 import { useNavigate } from 'react-router-dom';
-import VoteOption from './VoteOption';
-import { showModal } from '../store/app/appSlice'
+import { showModal } from '../../store/app/appSlice'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
-import Comment from './Comment';
+import Votebar from '../Vote/Votebar';
+import VoteOption from '../Vote/VoteOption';
+import Comment from '../Vote/Comment';
 const ProductInfomation = ({ totalRatings, ratings, productName, pid, rerender, product }) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()

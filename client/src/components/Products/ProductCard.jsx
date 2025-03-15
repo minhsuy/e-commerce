@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import { formatMoney } from '../utils/helper'
+import { formatMoney } from '../../utils/helper'
 import {
     renderStarFromNumber
-} from '../utils/renderToStar'
+} from '../../utils/renderToStar'
 import { Link } from 'react-router-dom';
 const ProductCard = ({ price, totalRatings, title, image, id, category }) => {
     return (

@@ -1,9 +1,9 @@
 import React, { memo, useEffect, useRef, useState } from 'react';
-import logo from '../assets/logo.png'
+import logo from '../../assets/logo.png'
 import PropTypes from 'prop-types'
-import { voteOptions } from '../utils/constant';
-import { icons } from '../utils/icons';
-import Button from './Button';
+import { voteOptions } from '../../utils/constant';
+import { icons } from '../../utils/icons';
+import Button from '../Button/Button';
 const { FaStar } = icons
 const VoteOption = ({ productName, handleSubmitVoteOption }) => {
     const [chosenScore, setChosenScore] = useState(null)

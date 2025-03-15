@@ -1,10 +1,10 @@
 import React, { useEffect, useState, memo } from 'react';
-import { icons } from '../utils/icons';
-import { apiGetProducts } from '../apis/product';
-import { formatMoney } from "../utils/helper";
+import { icons } from '../../utils/icons';
+import { apiGetProducts } from '../../apis/product';
+import { formatMoney } from "../../utils/helper";
 import { Link } from 'react-router-dom'
-import { renderStarFromNumber } from '../utils/renderToStar'
-import Countdown from './Countdown';
+import { renderStarFromNumber } from '../../utils/renderToStar'
+import Countdown from '../common/Countdown';
 const DealDaily = () => {
     const [dailyDeal, setDailyDeal] = useState(null);
     const [hour, setHour] = useState(0);

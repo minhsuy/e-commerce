@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux';
-import { showModal } from '../store/app/appSlice'
+import { showModal } from '../../store/app/appSlice'
 const Modal = ({ children }) => {
     const dispatch = useDispatch()
     return (

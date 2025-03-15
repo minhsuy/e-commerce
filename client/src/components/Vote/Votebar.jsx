@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types'
-import { icons } from '../utils/icons';
+import { icons } from '../../utils/icons';
 const { FaStar } = icons
 const Votebar = ({ number, ratingCount, ratingTotal }) => {
     const percentRef = useRef(null);

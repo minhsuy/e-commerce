@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
-import { apiGetProducts } from '../apis/product';
-import ProductCard from './ProductCard';
+import { apiGetProducts } from '../../apis/product';
 import { Link } from 'react-router-dom';
+import ProductCard from './ProductCard';
 
 const FeatureProduct = () => {
     const [products, setProducts] = useState(null)

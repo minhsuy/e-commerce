@@ -1,4 +1,5 @@
 import { icons } from "./icons";
+import path from "./path";
 
 const { FaShieldAlt, IoIosGift, MdLocalShipping, FaReply, FaTty } = icons;
 
@@ -34,3 +35,48 @@ export const extraInfomation = [
         icons: <FaTty></FaTty>,
     },
 ];
+
+
+const { MdOutlineDashboard, MdOutlineGroups, RiProductHuntLine, CiMoneyBill
+} = icons
+export const adminSidebar = [
+    {
+        id: 1,
+        type: "SINGLE",
+        text: "Dashboard",
+        path: `/${path.ADMIN}/${path.DASHBOARD}`,
+        icon: <MdOutlineDashboard></MdOutlineDashboard>
+    },
+    {
+        id: 2,
+        type: "SINGLE",
+        text: "Manage User",
+        path: `/${path.ADMIN}/${path.MANAGE_USER}`,
+        icon: <MdOutlineGroups></MdOutlineGroups>
+    },
+    {
+        id: 3,
+        type: "PARENT",
+        text: "Manage Products",
+        icon: <RiProductHuntLine></RiProductHuntLine>,
+        submenu: [
+            {
+                text: 'Create product',
+                path: `/${path.ADMIN}/${path.CREATE_PRODUCT}`
+            },
+            {
+                text: 'Manage product',
+                path: `/${path.ADMIN}/${path.MANAGE_PRODUCTS}`
+            },
+        ]
+    },
+    {
+        id: 4,
+        type: 'SINGLE',
+        text: 'Manage Orders',
+        path: `/${path.ADMIN}/${path.MANAGE_ORDER}`,
+        icon: <CiMoneyBill></CiMoneyBill>
+    }
+
+];
+

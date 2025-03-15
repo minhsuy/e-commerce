@@ -1,15 +1,15 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
 import PropTypes from "prop-types";
-import { icons } from '../utils/icons';
-import { colors } from '../utils/constant';
+import { colors } from '../../utils/constant';
 import { createSearchParams, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { apiGetProducts } from '../apis/product';
-const { IoIosArrowDown } = icons
-import path from '../utils/path';
-import { formatMoney } from '../utils/helper';
+import { apiGetProducts } from '../../apis/product';
+
+import { formatMoney } from '../../utils/helper';
 import { toast } from 'react-toastify'
-import useDebounce from '../hooks/useDebounce';
+import useDebounce from '../../hooks/useDebounce';
+import { icons } from '../../utils/icons';
 const SearchItem = ({ name, activeClick, changeActiveFilter, type = 'checkbox', category }) => {
+    const { IoIosArrowDown } = icons
     const navigate = useNavigate()
     const [selected, setSelected] = useState([])
     const [price, setPrice] = useState({

@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import Slider from 'react-slick';
 import PropTypes from 'prop-types';
-import Product from './Product';
+import Product from '../Products/Product';
 
 const settings = {
     dots: false,

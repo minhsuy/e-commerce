@@ -1,10 +1,14 @@
 import React from 'react';
-import logo from '../assets/logo.png'
-import { icons } from "../utils/icons"
+import logo from '../../assets/logo.png'
+import { icons } from "../../utils/icons"
 import { Link } from 'react-router-dom';
-import path from '../utils/path'
+import path from '../../utils/path'
+import { useSelector } from 'react-redux';
 const Header = () => {
     const { FaPhoneAlt, MdEmail, FaShoppingCart, FaUserCircle, AiOutlineUser, IoBagHandleSharp } = icons
+
+    const { current } = useSelector((state) => state.user)
+
     return (
         <div className='w-main h-[110px] py-[35px] flex justify-between' >
             <Link to={`/${path.HOME}`}>
@@ -25,13 +29,17 @@ const Header = () => {
                     </span>
                     <span>Online Support 24/7</span>
                 </div>
-                <div className='flex items-center justify-center gap-2 px-6 border-r cursor-pointer '>
-                    <IoBagHandleSharp className='text-main text-3xl'></IoBagHandleSharp>
-                    <span>0 item(s)</span>
-                </div>
-                <div className='flex items-center justify-center px-6 gap-x-2 cursor-pointer'><FaUserCircle className='text-3xl text-main'></FaUserCircle>
-                    <span className='font-semibold '>Profile</span>
-                </div>
+                {current &&
+                    <>
+                        <div className='flex items-center justify-center gap-2 px-6 border-r cursor-pointer '>
+                            <IoBagHandleSharp className='text-main text-3xl'></IoBagHandleSharp>
+                            <span>0 item(s)</span>
+                        </div>
+                        <Link to={current?.role === '0' ? `/${path.ADMIN}/${path.DASHBOARD}` : `/${path.MEMBER}/${path.PERSONAL}`} className='flex items-center justify-center px-6 gap-x-2 cursor-pointer hover:text-main'><FaUserCircle className='text-3xl text-main'></FaUserCircle>
+                            <span className='font-semibold  '>Profile</span>
+                        </Link>
+                    </>
+                }
             </div>
         </div>
     );

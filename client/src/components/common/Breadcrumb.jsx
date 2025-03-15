@@ -2,7 +2,7 @@ import React from 'react';
 import useBreadcrumbs from "use-react-router-breadcrumbs";
 import { Link, NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { icons } from '../utils/icons'
+import { icons } from '../../utils/icons'
 
 
 

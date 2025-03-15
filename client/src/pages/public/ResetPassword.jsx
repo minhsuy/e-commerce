@@ -1,9 +1,9 @@
 import React, { memo, useState } from 'react';
-import Button from '../../components/Button';
 import { useParams, useNavigate } from 'react-router-dom';
 import { apiResetPassword } from '../../apis/user';
 import Swal from 'sweetalert2';
 import path from '../../utils/path';
+import Button from '../../components/Button/Button';
 const ResetPassword = () => {
     const { token } = useParams()
     const navigate = useNavigate()

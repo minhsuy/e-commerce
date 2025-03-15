@@ -3,8 +3,6 @@ import logImage from '../../assets/login.jpg'
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import InputField from '../../components/InputField';
-import Button from '../../components/Button';
 import { apiRegister, apiLogin, apiForgotPassword } from '../../apis/user';
 import path from '../../utils/path'
 import { Link, useNavigate } from 'react-router-dom'
@@ -14,6 +12,10 @@ import { useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import { toast } from 'react-toastify'
 import { validate } from '../../utils/helper';
+import { showModal } from '../../store/app/appSlice';
+import Button from '../../components/Button/Button';
+import Loading from '../../components/common/Loading';
+import InputField from '../../components/Inputs/InputField';
 
 
 const Login = () => {
@@ -53,8 +55,10 @@ const Login = () => {
         // register
         if (validateAuth === 0) {
             if (isRegister) {
+                dispatch(showModal({ isShowModal: true, modalChildren: <Loading></Loading> }))
                 const response = await apiRegister(payload)
                 if (response.success === true) {
+                    dispatch(showModal({ isShowModal: false, modalChildren: null }))
                     Swal.fire({ title: 'Register successfully', text: response.message, icon: 'success' }).then(() => {
                         resetPayload()
                         setIsRegister(false)
@@ -65,12 +69,13 @@ const Login = () => {
                     Swal.fire({ title: 'Register failed', text: response.message, icon: 'error' }).then(() =>
                         setIsRegister(false))
                 }
-
             }
             // login
             else {
                 const result = await apiLogin(data)
+                dispatch(showModal({ isShowModal: true, modalChildren: <Loading></Loading> }))
                 if (result.userData) {
+                    dispatch(showModal({ isShowModal: false, modalChildren: null }))
                     Swal.fire({ icon: 'success', title: "Login successfully", text: result.message }).then(() => {
                         dispatch(login({ isLoggedIn: true, token: result.accessToken, userData: result.userData }))
                         navigate(`/${path.HOME}`)
@@ -97,6 +102,7 @@ const Login = () => {
     }, [email])
     return (
         <div className='w-screen h-screen relative'>
+
             {isForgotPassword && <div className='absolute inset-0 bg-white flex justify-center py-8 z-50'>
                 <div className='flex flex-col gap-y-3'>
                     <span className=' font-bold text-base'>Nhập email của bạn vào</span>
@@ -137,6 +143,7 @@ const Login = () => {
                     {/* email */}
                     <span>Email address</span>
                     <InputField type={'email'} value={payload.email} setValue={setPayload} placeholder={'Enter your email address'} name={'email'} invalidFields={invalidFields} setInvalidFields={setInvalidFields}></InputField>
+
                     {/* password */}
                     <span>Password</span>
                     <InputField type={'password'} value={payload.password} setValue={setPayload} placeholder={'Enter your password'} name={'password'} invalidFields={invalidFields} setInvalidFields={setInvalidFields}></InputField>

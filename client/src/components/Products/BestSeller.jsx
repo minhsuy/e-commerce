@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { apiGetProducts } from '../apis/product';
+import { apiGetProducts } from '../../apis/product';
 import Slider from "react-slick";
 import Product from './Product';
-import CustomSlider from './CustomSlider';
 import { useDispatch, useSelector } from 'react-redux';
-import { getNewProducts } from '../store/products/asyncAction'
+import { getNewProducts } from '../../store/products/asyncAction'
+import CustomSlider from '../common/CustomSlider';
 const tabs = [
     {
         id: 1,

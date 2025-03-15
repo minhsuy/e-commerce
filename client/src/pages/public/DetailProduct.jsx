@@ -1,18 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { apiGetProduct, apiGetProducts } from '../../apis/product'
-import Breadcrumb from '../../components/Breadcrumb';
 import Slider from 'react-slick';
 import ReactImageMagnify from 'react-image-magnify';
 import { formatMoney, formatPrice } from '../../utils/helper';
 import { renderStarFromNumber } from '../../utils/renderToStar';
 import { icons } from '../../utils/icons';
-import Button from '../../components/Button';
-import SelectQuantity from '../../components/SelectQuantity';
 import { extraInfomation } from '../../utils/extraInfomation';
-import ProductExtraInfoItem from '../../components/ProductExtraInfoItem';
-import ProductInfomation from '../../components/ProductInfomation';
-import CustomSlider from '../../components/CustomSlider';
+import Button from '../../components/Button/Button';
+import Breadcrumb from '../../components/common/Breadcrumb';
+import CustomSlider from '../../components/common/CustomSlider';
+import SelectQuantity from '../../components/common/SelectQuantity';
+import ProductExtraInfoItem from '../../components/Products/ProductExtraInfoItem';
+import ProductInfomation from '../../components/Products/ProductInfomation';
 
 
 const settings = {

@@ -12,7 +12,7 @@ export const generateAccessToken = async ({ _id, role }) => {
     role,
     privateKey: process.env.JWT_SECRET,
     options: {
-      expiresIn: "15s",
+      expiresIn: "60m",
     },
   });
 };

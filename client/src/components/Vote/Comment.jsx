@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types'
-import avatar from '../assets/avatar.avif'
+import avatar from '../../assets/avatar.avif'
 import moment from 'moment'
-import { renderStarFromNumber } from '../utils/renderToStar';
+import { renderStarFromNumber } from '../../utils/renderToStar';
 const Comment = ({ image = avatar, name = 'Anonymous', comment, updatedAt, star }) => {
     return (
         <div className='w-[400px] flex p-2 rounded-lg border border-gray-300 hover:border-gray-400 '>
@@ -12,7 +12,7 @@ const Comment = ({ image = avatar, name = 'Anonymous', comment, updatedAt, star 
             <div className='flex flex-col flex-auto justify-start'>
                 <div className='flex items-center gap-x-5'>
                     <h3 className='font-semibold'>{name}</h3>
-                    <span>{moment(updatedAt).fromNow()}</span>
+                    <span>{moment(updatedAt).format("DD/MM/YYYY HH:mm:ss")}</span>
                 </div>
                 <div className='flex flex-col gap-2 pl-4'>
                     <span className='flex gap-x-3'>

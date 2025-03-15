@@ -20,6 +20,14 @@ import { IoIosGift } from "react-icons/io";
 import { FaReply } from "react-icons/fa";
 import { FaTty } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
+import { MdOutlineDashboard } from "react-icons/md";
+import { MdOutlineGroups } from "react-icons/md";
+import { FaProductHunt } from "react-icons/fa6";
+import { CiMoneyBill } from "react-icons/ci";
+import { RiProductHuntLine } from "react-icons/ri";
+import { FaEdit } from "react-icons/fa";
+import { IoIosArrowUp } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
 export const icons = {
   FaPhoneAlt,
   MdEmail,
@@ -42,4 +50,12 @@ export const icons = {
   FaReply,
   FaTty,
   IoIosArrowDown,
+  MdOutlineDashboard,
+  MdOutlineGroups,
+  FaProductHunt,
+  CiMoneyBill,
+  RiProductHuntLine,
+  IoIosArrowUp,
+  FaEdit,
+  MdDelete,
 };

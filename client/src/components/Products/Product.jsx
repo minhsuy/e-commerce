@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { formatMoney } from "../utils/helper";
-import label from '../assets/new.png';
-import trending from '../assets/trending.png';
-import { renderStarFromNumber } from "../utils/renderToStar";
-import SelectOption from "./SelectOption";
-import { icons } from "../utils/icons";
+import { formatMoney } from "../../utils/helper";
+import label from '../../assets/new.png';
+import trending from '../../assets/trending.png';
+import { renderStarFromNumber } from "../../utils/renderToStar";
+import SelectOption from "../search/SelectOption";
+import { icons } from "../../utils/icons";
 import { Link } from 'react-router-dom'
-import path from '../utils/path'
+import path from '../../utils/path'
 const Product = ({ productData, tag, isCheck, normal }) => {
     const { LuMenu, FaEye, FaHeart } = icons
     const [isShowOption, setIsShowOption] = useState(false)
