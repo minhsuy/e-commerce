@@ -20,7 +20,7 @@ import {
   verifyAccessToken,
   verifyRefreshToken,
 } from "../middlewares/verifyToken.js";
-
+import uploader from "../config/cloudinary.config.js";
 const usersRouter = express.Router();
 // register user
 usersRouter.post("/register", registerController);
@@ -54,7 +54,12 @@ usersRouter.get("/", verifyAccessToken, isAdmin, getUsers);
 usersRouter.delete("/:uid", verifyAccessToken, isAdmin, deleteUser);
 
 //update user : user
-usersRouter.put("/current", verifyAccessToken, updateUser);
+usersRouter.put(
+  "/current",
+  verifyAccessToken,
+  uploader.single("avatar"),
+  updateUser
+);
 
 // update address
 

@@ -8,7 +8,6 @@ const Header = () => {
     const { FaPhoneAlt, MdEmail, FaShoppingCart, FaUserCircle, AiOutlineUser, IoBagHandleSharp } = icons
 
     const { current } = useSelector((state) => state.user)
-
     return (
         <div className='w-main h-[110px] py-[35px] flex justify-between' >
             <Link to={`/${path.HOME}`}>
@@ -35,8 +34,8 @@ const Header = () => {
                             <IoBagHandleSharp className='text-main text-3xl'></IoBagHandleSharp>
                             <span>0 item(s)</span>
                         </div>
-                        <Link to={current?.role === '0' ? `/${path.ADMIN}/${path.DASHBOARD}` : `/${path.MEMBER}/${path.PERSONAL}`} className='flex items-center justify-center px-6 gap-x-2 cursor-pointer hover:text-main'><FaUserCircle className='text-3xl text-main'></FaUserCircle>
-                            <span className='font-semibold  '>Profile</span>
+                        <Link to={current?.role === '0' ? `/${path.ADMIN}/${path.DASHBOARD}` : `/${path.MEMBER}/${path.PERSONAL}`} className='flex items-center justify-center px-6 gap-x-2 cursor-pointer hover:text-main'><img src={current?.avatar} className='w-[35px] h-[35px] rounded-full object-cover'></img>
+                            <span className='text-base'>{current?.firstname} {current?.lastname}</span>
                         </Link>
                     </>
                 }

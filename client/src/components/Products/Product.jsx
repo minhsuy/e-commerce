@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import PropTypes from "prop-types";
 import { formatMoney } from "../../utils/helper";
 import label from '../../assets/new.png';
@@ -8,12 +8,17 @@ import SelectOption from "../search/SelectOption";
 import { icons } from "../../utils/icons";
 import { Link } from 'react-router-dom'
 import path from '../../utils/path'
-const Product = ({ productData, tag, isCheck, normal }) => {
+import withBaseComponent from "../../hocs/withBaseComponent";
+const Product = ({ productData, tag, isCheck, normal, navigate }) => {
     const { LuMenu, FaEye, FaHeart } = icons
     const [isShowOption, setIsShowOption] = useState(false)
+    const handleChooseOption = (e, action) => {
+        e.stopPropagation();
+        console.log(action)
+    }
     return (
         <div className="w-full text-base  px-[10px]">
-            <Link to={`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData.title}`} className="border border-gray-300 rounded-md p-[15px] cursor-pointer flex flex-col items-center"
+            <div onClick={() => navigate(`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData.title}`)} className="border border-gray-300 rounded-md p-[15px] cursor-pointer flex flex-col items-center"
                 onMouseEnter={e => {
                     e.stopPropagation()
                     setIsShowOption(true)
@@ -26,9 +31,16 @@ const Product = ({ productData, tag, isCheck, normal }) => {
                 <div className="w-full relative">
                     {isShowOption && <div
                         className="absolute bottom-[-10px] left-0 right-0  flex justify-center gap-x-2 animate-slide-top">
-                        <SelectOption icon={<LuMenu></LuMenu>}></SelectOption>
-                        <SelectOption icon={<FaEye></FaEye>}></SelectOption>
-                        <SelectOption icon={<FaHeart></FaHeart>}></SelectOption>
+                        <div onClick={() => navigate(`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData.title}`)} >
+                            <SelectOption icon={<LuMenu></LuMenu>}></SelectOption>
+                        </div>
+
+                        <span onClick={(e) => handleChooseOption(e, 'quick_view')}>
+                            <SelectOption icon={<FaEye></FaEye>}></SelectOption>
+                        </span>
+                        <span onClick={(e) => handleChooseOption(e, 'wishlist')}>
+                            <SelectOption icon={<FaHeart></FaHeart>}></SelectOption>
+                        </span>
                     </div>}
                     <img src={productData?.thumb} alt={productData?.title || "Product"} className="w-[243px] h-[243px] object-cover" />
                     {(isCheck || normal) ? "" : (
@@ -46,7 +58,7 @@ const Product = ({ productData, tag, isCheck, normal }) => {
                     <span className="line-clamp-1">{productData.title}</span>
                     <span>{`${formatMoney(productData?.price)} VNĐ`}</span>
                 </div>
-            </Link>
+            </div>
         </div >
     );
 };
@@ -66,6 +78,7 @@ Product.propTypes = {
     tag: PropTypes.string,
     isCheck: PropTypes.string,
     normal: PropTypes.string,
+    navigate: PropTypes.any,
 };
 
-export default Product;
+export default withBaseComponent(memo(Product));

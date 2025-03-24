@@ -1,10 +1,10 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
-const InputForms = ({ label, disabled, register, errors, id, validate, type = 'text', placeholder, className, value, onChange }) => {
+const InputForms = ({ label, disabled, register, errors, id, validate, type = 'text', placeholder, className, value, onChange, readOnly, height }) => {
     return (
-        <div className='flex flex-col h-[78px] gap-y-2'>
-            {label && <label htmlFor={id}>{label}</label>}
+        <div className={`flex flex-col  gap-y-2`}>
+            {label && <label className='font-semibold' htmlFor={id}>{label}</label>}
             <input
                 type={type}
                 id={id}
@@ -13,7 +13,8 @@ const InputForms = ({ label, disabled, register, errors, id, validate, type = 't
                 onChange={onChange}
                 placeholder={placeholder}
                 defaultValue={value}
-                className={`${className} px-4 py-2 rounded-md w-full focus:border focus:border-main outline-none border-gray-300`}
+                readOnly={readOnly}
+                className={`${className} px-4 py-2 rounded-md ${readOnly ? '' : 'focus:border focus:border-main'} outline-none border border-gray-300`}
             />
             {errors?.[id] && <span className='text-main text-xs'>{errors[id]?.message}</span>}
         </div>
@@ -32,7 +33,9 @@ InputForms.propTypes = {
     name: PropTypes.string,
     className: PropTypes.string,
     value: PropTypes.string,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    readOnly: PropTypes.any,
+    height: PropTypes.any,
 };
 
 export default memo(InputForms);

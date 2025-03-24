@@ -10,9 +10,11 @@ import InputForms from '../../components/Inputs/InputForms';
 import Button from '../../components/Button/Button';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { activeStatus, roles } from '../../utils/constant';
 const ManageUser = () => {
-    const { register, formState: { errors }, handleSubmit } = useForm();
-    const { FaEdit, MdDelete } = icons
+    const { register, reset, formState: { errors }, handleSubmit } = useForm();
+    const { CiTrash,
+        CiEdit } = icons
     const [users, setUsers] = useState(null)
     const [queries, setQueries] = useState({
         q: ''
@@ -39,7 +41,6 @@ const ManageUser = () => {
         fetchAllUser()
     }
     const handleDeleteUser = async (uid) => {
-        console.log(uid)
         Swal.fire({ title: 'Are u sure ?', text: 'Delete user', icon: 'warning', showCancelButton: true }).then(async (result) => {
             if (result.isConfirmed) {
                 const response = await apiDeleteUser(uid)
@@ -53,10 +54,18 @@ const ManageUser = () => {
             }
         })
     }
+    const handleResetForm = useCallback(() => {
+        setEditElement(null)
+        reset()
+    }, [editElement])
+    const handleSetValueEdit = useCallback((value) => {
+        reset()
+        setEditElement(value)
+    }, [editElement])
     return (
         <div className='w-full'>
             <h1 className='h-[75px] flex justify-between items-center'>
-                <span className='text-xl font-semibold'>Manage user</span>
+                <span className='text-2xl font-bold'>Manage user</span>
             </h1>
             <div className='w-full py-4'>
                 <div className='flex justify-end py-4'>
@@ -94,7 +103,8 @@ const ManageUser = () => {
                                     <td className='py-2 px-4'> {editElement?._id === item?._id ? <InputForms validate={{ required: 'Firstname is required' }} register={register} placeholder={'Firstname'} id={'firstname'} value={editElement?.firstname} errors={errors}></InputForms> : <span>{item?.firstname} </span>}</td>
                                     {/* lastname */}
                                     <td className='py-2 px-4'> {editElement?._id === item?._id ? <InputForms register={register} validate={{ required: 'Lastname is required' }} placeholder={'Lastname'} id={'lastname'} value={editElement?.lastname} errors={errors}></InputForms> : <span>{item?.lastname} </span>}</td>
-                                    <td className='py-2 px-4'>{editElement?._id === item?._id ? <Select></Select> : <span>{item?.role === '0' ? 'Admin' : 'User'}</span>}</td>
+                                    {/* role */}
+                                    <td className='py-2 px-4'>{editElement?._id === item?._id ? <Select register={register} errors={errors} value={+item.role} id={'role'} option={roles}></Select> : <span>{roles?.find((el) => el.code === +item?.role).value}</span>}</td>
 
                                     {/* mobile */}
 
@@ -105,14 +115,16 @@ const ManageUser = () => {
                                             message: "invalid mobile number"
                                         }
                                     }} placeholder={'Mobile'} id={'mobile'} value={editElement?.mobile} errors={errors}></InputForms> : <span>{item?.mobile} </span>}</td>
-                                    <td className='py-2 px-4'>{editElement?._id === item?._id ? <Select></Select> : <span>{item?.isBlocked ? 'Block' : 'Active'}</span>}</td>
+                                    {/* isBlocked */}
+
+                                    <td className='py-2 px-4'>{editElement?._id === item?._id ? <Select register={register} errors={errors} value={item.isBlocked} id={'isBlocked'} option={activeStatus}></Select> : <span>{item?.isBlocked ? 'Blocked' : 'Active'}</span>}</td>
                                     <td className=''>{moment(item?.createdAt).format("DD/MM/YYYY HH:mm:ss")}</td>
 
 
                                     <td className='flex gap-x-3 items-center cursor-pointer py-2'>
 
-                                        {editElement?._id === item._id ? <span className='text-main hover:underline' onClick={() => setEditElement(null)}>Back</span> : <span className='text-main hover:underline' onClick={() => setEditElement(item)}>Edit</span>}
-                                        <span className='text-main hover:underline' onClick={() => handleDeleteUser(item?._id)} >Delete</span>
+                                        <span className='hover:underline text-red-500 text-2xl' onClick={() => handleDeleteUser(item?._id)} ><CiTrash></CiTrash>   </span>
+                                        {editElement?._id === item._id ? <span className='text-main hover:underline' onClick={handleResetForm}>Back</span> : <span className='hover:underline text-green-500 text-2xl' onClick={() => handleSetValueEdit(item)}> <CiEdit></CiEdit>   </span>}
                                     </td>
                                 </tr>
                             ))}

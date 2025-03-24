@@ -1,17 +1,21 @@
 import React, { useEffect } from 'react';
 import usePagination from '../../hooks/usePagination';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import PagItem from './PagItem';
 import { useSearchParams } from 'react-router-dom';
+
 const Pagination = ({ totalCount, productNumber, isShowProductCount = true }) => {
-    const [params] = useSearchParams()
-    const pagination = usePagination(totalCount, params.get("page") || 1)
+    const [params] = useSearchParams();
+    const currentPage = +(params.get('page') || 1);
+    const pagination = usePagination(totalCount, currentPage);
+
+
     const range = () => {
-        const currentPage = +params.get('page')
-        const start = (10 * (currentPage - 1)) + 1
-        const end = Math.min(10 * currentPage, totalCount)
-        return `${start} - ${end}`
-    }
+        const start = (10 * (currentPage - 1)) + 1;
+        const end = Math.min(10 * currentPage, totalCount);
+        return `${start} - ${end}`;
+    };
+
     return (
         <div className='w-main flex items-center justify-between'>
             {isShowProductCount &&
@@ -28,11 +32,12 @@ const Pagination = ({ totalCount, productNumber, isShowProductCount = true }) =>
         </div>
     );
 };
+
 Pagination.propTypes = {
     totalCount: PropTypes.number,
     currentPage: PropTypes.number,
     productNumber: PropTypes.any,
     isShowProductCount: PropTypes.any,
-}
-export default Pagination;
+};
 
+export default Pagination;

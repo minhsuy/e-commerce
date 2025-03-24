@@ -13,7 +13,7 @@ import CustomSlider from '../../components/common/CustomSlider';
 import SelectQuantity from '../../components/common/SelectQuantity';
 import ProductExtraInfoItem from '../../components/Products/ProductExtraInfoItem';
 import ProductInfomation from '../../components/Products/ProductInfomation';
-
+import DOMPurify from 'dompurify';
 
 const settings = {
     dots: false,
@@ -30,7 +30,13 @@ const DetailProduct = () => {
     const [img, setImg] = useState(null)
     const [quantity, setQuantity] = useState(1)
     const [update, setUpdate] = useState(false)
-
+    const [varriants, setVarriants] = useState(null)
+    const [currentProduct, setCurrentProduct] = useState({
+        title: '',
+        price: 0,
+        thumb: '',
+        images: [],
+    })
     const rerender = useCallback(() => {
         setUpdate(!update)
     }, [update])
@@ -46,6 +52,20 @@ const DetailProduct = () => {
         }
         window.scrollTo(0, 0)
     }, [pid, title, update])
+    useEffect(() => {
+        if (varriants !== null) setCurrentProduct({
+            title: product?.varriants?.find((item) => item.sku === varriants)?.title,
+            price: product?.varriants?.find((item) => item.sku === varriants)?.price,
+            thumb: product?.varriants?.find((item) => item.sku === varriants)?.thumb,
+            images: product?.varriants?.find((item) => item.sku === varriants)?.images,
+        })
+        else setCurrentProduct({
+            title: '',
+            price: 0,
+            thumb: '',
+            images: [],
+        })
+    }, [varriants])
     const handleSetImage = useCallback((item) => {
         setImg(item)
     }, [img])
@@ -60,12 +80,11 @@ const DetailProduct = () => {
         }
         else setQuantity(prev => prev + 1)
     }, [quantity])
-
     return (
         <div className='w-full'>
             <div className='h-[81px] bg-gray-100'>
-                <h3 className='font-semibold text-base'>{title}</h3>
-                <Breadcrumb title={title} category={category}></Breadcrumb>
+                <h3 className='font-semibold text-base'>{currentProduct?.title || product?.title}</h3>
+                <Breadcrumb title={currentProduct?.title || title} category={category}></Breadcrumb>
             </div>
             <div className='mt-4 flex'>
                 <div className=' flex flex-col gap-y-4 w-2/5'>
@@ -74,10 +93,10 @@ const DetailProduct = () => {
                             smallImage: {
                                 alt: 'Wristwatch by Ted Baker London',
                                 isFluidWidth: true,
-                                src: img || product?.images[0]
+                                src: img || (currentProduct?.thumb || product?.images[0])
                             },
                             largeImage: {
-                                src: img || product?.images[0],
+                                src: img || (currentProduct?.thumb || product?.images[0]),
                                 width: 1200,
                                 height: 1200
                             }
@@ -85,7 +104,12 @@ const DetailProduct = () => {
                     </div>
                     <div className='w-[458px]'>
                         <Slider {...settings}>
-                            {product?.images?.map((item, index) => (
+                            {currentProduct?.thumb === '' && product?.images?.map((item, index) => (
+                                <div key={index} className='px-2'>
+                                    <img src={item} onClick={() => handleSetImage(item)} alt="" className='w-[143px] h-[143px] p-2 object-contain border border-gray-200 rounded-lg cursor-pointer ' />
+                                </div>
+                            ))}
+                            {currentProduct?.thumb !== '' && currentProduct?.images?.map((item, index) => (
                                 <div key={index} className='px-2'>
                                     <img src={item} onClick={() => handleSetImage(item)} alt="" className='w-[143px] h-[143px] p-2 object-contain border border-gray-200 rounded-lg cursor-pointer ' />
                                 </div>
@@ -96,7 +120,9 @@ const DetailProduct = () => {
                 <div className='w-2/5 flex flex-col gap-4'>
                     <div className='flex items-center justify-between'>
                         <div className='flex   items-center justify-center'>
-                            <h2 className='text-2xl font-semibold'>{`${formatMoney(formatPrice(product?.price))} VNĐ`}
+
+                            <h2 className='text-2xl font-semibold'>
+                                {formatMoney(formatPrice(+currentProduct?.price || product?.price))} VNĐ
                             </h2>
                             <span className='text-base text-main font-medium italic ml-20'>{`Kho : ${product?.quantity}`}</span>
                         </div>
@@ -108,10 +134,42 @@ const DetailProduct = () => {
                         <span className='italic ml-2 text-main text-base font-medium'>({`Đã bán : ${product?.sold}`})</span>
                     </div>
                     <ul className='list-disc pl-4'>
-                        {product?.description?.map((item, index) => (
-
+                        {product?.description?.length > 1 && product?.description?.map((item, index) => (
                             <li key={index} className='leading-8'>{item}</li>
                         ))}
+                        {product?.description?.length === 1 &&
+                            <div className='text-sm' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product?.description[0]) }}></div>
+                        }
+                        {/* varriants */}
+                        <div className='my-4 flex items-center gap-4'>
+                            <span>Color</span>
+                            <span>:</span>
+                            <div className='flex flex-wrap gap-4 items-center w-full cursor-pointer'>
+                                <div className={`flex items-center gap-x-2 ${!varriants && 'bg-blue-500 rounded-lg text-white p-2'}`} onClick={() => {
+                                    setVarriants(null)
+                                    setImg('')
+                                }} >
+                                    <img src={product?.thumb} alt="thumb" className='w-[40px] h-[40px] object-cover rounded-lg' />
+                                    <span className='flex flex-col gap-1'>
+                                        <span className='font-semibold'>{product?.color?.toUpperCase()}</span>
+                                        <span className='font-semibold'>{formatMoney(formatPrice(product?.price))} VNĐ</span>
+                                    </span>
+                                </div>
+                                {product?.varriants?.map((item) => (
+                                    <div className={`flex items-center gap-x-2 cursor-pointer ${item?.sku === varriants ? 'bg-blue-500 rounded-lg text-white p-2' : ''}`} key={item?.color} onClick={() => {
+                                        setVarriants(item?.sku)
+                                        setImg('')
+                                    }
+                                    }>
+                                        <img src={item?.thumb} alt="thumb" className='w-[40px] h-[40px] object-cover rounded-lg' />
+                                        <span className='flex flex-col gap-1'>
+                                            <span className='font-semibold'>{item?.color?.toUpperCase()}</span>
+                                            <span className='font-semibold'>{formatMoney(formatPrice(item?.price))} VNĐ</span>
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </ul>
                     <div className='flex flex-col gap-y-8'>
                         <div className='flex items-center gap-x-3 '>

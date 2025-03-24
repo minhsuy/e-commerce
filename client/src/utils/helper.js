@@ -62,10 +62,19 @@ export const formatPrice = (number) => {
   return Math.round(number / 1000) * 1000;
 };
 
+// Hàm generateRange giúp tạo ra dãy số trang từ start đến end
 export const generateRange = (start, end) => {
-  let value = [];
-  for (let i = start; i < end; i++) {
-    value.push(i);
+  const range = [];
+  for (let i = start; i <= end; i++) {
+    range.push(i);
   }
-  return value;
+  return range;
 };
+
+export const imageToBase64 = (file) =>
+  new Promise(function (resolve, reject) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject("Error: ", error);
+  });

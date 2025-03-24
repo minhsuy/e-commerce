@@ -2,18 +2,24 @@ import Product from "../models/productModel.js";
 import asyncHandler from "express-async-handler";
 import slugify from "slugify";
 import dotenv from "dotenv";
+import makeSku from "uniqid";
 dotenv.config();
 export const createProduct = asyncHandler(async (req, res) => {
-  if (Object.keys(req.body).length === 0) {
+  const { title, price, description, brand, category, color } = req.body;
+  const thumb = req?.files?.thumb[0]?.path;
+  const images = req?.files?.images?.map((item) => item.path);
+  if (!(title && price && description && brand && category && color)) {
     throw new Error("Missing inputs !");
   }
-  if (req.body && req.body.title) {
-    req.body.slug = slugify(req.body.title);
-  }
+  req.body.slug = slugify(req.body.title);
+  if (thumb) req.body.thumb = thumb;
+  if (images) req.body.images = images;
   const newProduct = await Product.create(req.body);
   return res.status(200).json({
     success: newProduct ? true : false,
     message: newProduct ? newProduct : "Create a new product failed",
+    thumb,
+    images,
   });
 });
 export const getProduct = asyncHandler(async (req, res) => {
@@ -96,9 +102,9 @@ export const getProducts = asyncHandler(async (req, res) => {
 
 export const updateProduct = asyncHandler(async (req, res) => {
   const { pid } = req.params;
-  if (Object.keys(req.body).length === 0) {
-    throw new Error("Missing inputs !");
-  }
+  const files = req?.files;
+  if (files?.thumb) req.body.thumb = files?.thumb[0]?.path;
+  if (files?.images) req.body.images = files?.images?.map((el) => el.path);
   if (req.body.title) {
     req.body.slug = slugify(req.body.title);
   }
@@ -186,5 +192,32 @@ export const uploadImagesProduct = asyncHandler(async (req, res) => {
   return res.status(200).json({
     success: response ? true : false,
     updatedProduct: response ? response : "Can not updated",
+  });
+});
+export const addVariant = asyncHandler(async (req, res) => {
+  const { pid } = req.params;
+  const { title, price, color } = req.body;
+  const thumb = req?.files?.thumb[0]?.path;
+  const images = req?.files?.images?.map((item) => item.path);
+  if (!pid) throw new Error("Missing product id");
+  const response = await Product.findByIdAndUpdate(
+    pid,
+    {
+      $push: {
+        varriants: {
+          color,
+          price,
+          title,
+          thumb,
+          images,
+          sku: makeSku().toUpperCase(),
+        },
+      },
+    },
+    { new: true }
+  );
+  return res.status(200).json({
+    success: response ? true : false,
+    response: response ? response : "Can not updated",
   });
 });

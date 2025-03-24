@@ -63,6 +63,11 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
+      default:
+        "https://tse1.mm.bing.net/th?id=OIP.-4nY2ID2ybM6f3UnHOPaeQHaFj&pid=Api&P=0&h=180",
+    },
+    description: {
+      type: String,
     },
   },
   {

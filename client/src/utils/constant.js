@@ -151,3 +151,13 @@ export const roles = [
     value: "User",
   },
 ];
+export const activeStatus = [
+  {
+    code: false,
+    value: "Active",
+  },
+  {
+    code: true,
+    value: "Blocked",
+  },
+];

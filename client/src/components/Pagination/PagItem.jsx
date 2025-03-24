@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types'
-import { useSearchParams, createSearchParams, useNavigate, useParams } from 'react-router-dom';
+import { useSearchParams, createSearchParams, useNavigate, useParams, useLocation } from 'react-router-dom';
 const PagItem = ({ children }) => {
-    const { category } = useParams()
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams();
-
+    const currentPage = +(searchParams.get('page') || 1);
+    const isActive = currentPage === +children;
+    const location = useLocation();
     const handleSetPage = () => {
         const params = [];
         for (let item of searchParams.entries()) {
@@ -14,7 +15,7 @@ const PagItem = ({ children }) => {
         let queries = {}
         queries.page = +children
         navigate({
-            pathname: `/${category}`,
+            pathname: location.pathname,
             search: createSearchParams(queries).toString()
         })
     }

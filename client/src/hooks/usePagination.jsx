@@ -1,30 +1,34 @@
 import React, { useMemo } from 'react';
 import { generateRange } from '../utils/helper';
-const usePagination = (totalProductCount, currentPage, siblingCount = 1) => {
 
-    const paginationCount = useMemo(() => {
-        const paginationCount = Math.ceil(totalProductCount / 10)
-        const totalPaginationItem = siblingCount + 5
-        if (paginationCount <= totalPaginationItem) return generateRange(1, paginationCount)
-        const isShowLeft = currentPage - siblingCount > 2
-        const isShowRight = currentPage + siblingCount < paginationCount - 1
-        if (isShowLeft && !isShowRight) {
-            const rightStart = paginationCount - 4
-            const rightRange = generateRange(rightStart, paginationCount)
-            return [1, '...', ...rightRange]
+const usePagination = (totalProductCount, currentPage, siblingCount = 1) => {
+    return useMemo(() => {
+        const paginationCount = Math.ceil(totalProductCount / 10);
+
+        // Nếu tổng số trang nhỏ hơn hoặc bằng siblingCount + 5, hiển thị tất cả các trang
+        if (paginationCount <= siblingCount + 5) {
+            return generateRange(1, paginationCount);
         }
+
+        // Kiểm tra các điều kiện để hiển thị dấu "..."
+        const isShowLeft = currentPage - siblingCount > 2;
+        const isShowRight = currentPage + siblingCount < paginationCount - 1;
+
         if (!isShowLeft && isShowRight) {
-            const leftRange = generateRange(1, 5)
-            return [...leftRange, '...', paginationCount]
+            return [...generateRange(1, paginationCount)];
         }
-        const siblingLeft = Math.max(currentPage - siblingCount, 1)
-        const siblingRight = Math.min(currentPage + siblingCount, paginationCount)
+
+        if (isShowLeft && !isShowRight) {
+            return [1, '...', ...generateRange(paginationCount - 4, paginationCount)];
+        }
+
         if (isShowLeft && isShowRight) {
-            const middleRange = generateRange(siblingLeft, siblingRight)
-            return [1, '...', ...middleRange, '...', paginationCount]
+            return [1, '...', ...generateRange(currentPage - siblingCount, currentPage + siblingCount), '...', paginationCount];
         }
-    }, [totalProductCount, currentPage, siblingCount])
-    return paginationCount
+
+        // Trường hợp còn lại, hiển thị tất cả các trang
+        return generateRange(1, paginationCount);
+    }, [totalProductCount, currentPage, siblingCount]);
 };
 
 export default usePagination;

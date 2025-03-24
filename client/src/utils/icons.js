@@ -28,7 +28,18 @@ import { RiProductHuntLine } from "react-icons/ri";
 import { FaEdit } from "react-icons/fa";
 import { IoIosArrowUp } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import { CiTrash } from "react-icons/ci";
+import { CiEdit } from "react-icons/ci";
+import { FcAddDatabase } from "react-icons/fc";
+import { FaUserAlt } from "react-icons/fa";
+import { FaCartPlus } from "react-icons/fa";
+import { MdFormatListBulletedAdd } from "react-icons/md";
+import { MdWorkHistory } from "react-icons/md";
 export const icons = {
+  MdFormatListBulletedAdd,
+  MdWorkHistory,
+  FaCartPlus,
+  FaUserAlt,
   FaPhoneAlt,
   MdEmail,
   FaShoppingCart,
@@ -58,4 +69,7 @@ export const icons = {
   IoIosArrowUp,
   FaEdit,
   MdDelete,
+  CiTrash,
+  CiEdit,
+  FcAddDatabase,
 };

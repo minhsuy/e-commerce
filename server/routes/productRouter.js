@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  addVariant,
   createProduct,
   deleteProduct,
   getProduct,
@@ -12,7 +13,19 @@ import { isAdmin, verifyAccessToken } from "../middlewares/verifyToken.js";
 import uploadCloud from "../config/cloudinary.config.js";
 const productRouter = express.Router();
 // create a new product
-productRouter.post("/", verifyAccessToken, isAdmin, createProduct);
+productRouter.post(
+  "/",
+  verifyAccessToken,
+  isAdmin,
+  uploadCloud.fields([
+    { name: "images", maxCount: 10 },
+    {
+      name: "thumb",
+      maxCount: 1,
+    },
+  ]),
+  createProduct
+);
 
 // get all products
 productRouter.get("/", getProducts);
@@ -20,15 +33,44 @@ productRouter.get("/", getProducts);
 // rating
 productRouter.put("/ratings", verifyAccessToken, ratings);
 
+// add varriants
+productRouter.post(
+  "/varriant/:pid",
+  verifyAccessToken,
+  isAdmin,
+  uploadCloud.fields([
+    {
+      name: "thumb",
+      maxCount: 1,
+    },
+    {
+      name: "images",
+      maxCount: 10,
+    },
+  ]),
+  addVariant
+);
 // updated product
 
-productRouter.put("/:pid", verifyAccessToken, isAdmin, updateProduct);
+productRouter.put(
+  "/:pid",
+  verifyAccessToken,
+  isAdmin,
+  uploadCloud.fields([
+    { name: "images", maxCount: 10 },
+    { name: "thumb", maxCount: 1 },
+  ]),
+  updateProduct
+);
 // upload image
 productRouter.put(
   "/uploadimage/:pid",
   verifyAccessToken,
   isAdmin,
-  uploadCloud.array("images", 10),
+  uploadCloud.fields([
+    { name: "images", maxCount: 10 },
+    { name: "thumb", maxCount: 1 },
+  ]),
   uploadImagesProduct
 );
 

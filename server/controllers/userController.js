@@ -240,10 +240,9 @@ export const deleteUser = asyncHandler(async (req, res) => {
 });
 export const updateUser = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { body } = req;
-  if (!_id || Object.keys(req.body).length === 0)
-    throw new Error("Missing inputs !");
-  const response = await User.findByIdAndUpdate(_id, body, {
+  if (req.file) req.body.avatar = req.file.path;
+  if (!_id) throw new Error("Missing inputs !");
+  const response = await User.findByIdAndUpdate(_id, req.body, {
     new: true,
   }).select("-password -role");
   return res.status(200).json({

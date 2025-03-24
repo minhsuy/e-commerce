@@ -24,6 +24,9 @@ import CreateProduct from './pages/admin/CreateProduct';
 import MemberLayout from './pages/member/MemberLayout';
 import Personal from './pages/member/Personal';
 import Modal from './components/common/Modal';
+import History from './pages/member/History';
+import MyCart from './pages/member/MyCart';
+import Wishlist from './pages/member/Wishlist';
 function App() {
   const dispath = useDispatch()
   useEffect(() => {
@@ -58,6 +61,9 @@ function App() {
         {/* member */}
         <Route path={path.MEMBER} element={<MemberLayout />}>
           <Route path={path.PERSONAL} element={<Personal />}></Route>
+          <Route path={path.HISTORY} element={<History />}></Route>
+          <Route path={path.MY_CART} element={<MyCart />}></Route>
+          <Route path={path.WISHLIST} element={<Wishlist />}></Route>
         </Route>
         {/* member */}
         <Route path={path.FINAL_REGISTER} element={<FinalRegister />}></Route>

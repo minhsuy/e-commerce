@@ -54,3 +54,11 @@ export const apiDeleteUser = (uid) => {
     url: "/user/" + uid,
   });
 };
+
+export const apiUpdateCurrent = (data) => {
+  return axios({
+    method: "PUT",
+    url: "/user/current",
+    data,
+  });
+};
