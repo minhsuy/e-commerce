@@ -27,14 +27,21 @@ import Modal from './components/common/Modal';
 import History from './pages/member/History';
 import MyCart from './pages/member/MyCart';
 import Wishlist from './pages/member/Wishlist';
+import Cart from './cart/Cart';
+import { showCart } from './store/app/appSlice';
 function App() {
-  const dispath = useDispatch()
+  const dispatch = useDispatch()
   useEffect(() => {
-    dispath(getCategories())
+    dispatch(getCategories())
   }, [])
-  const { isShowModal, modalChildren } = useSelector((state) => state.app)
+  const { isShowModal, modalChildren, isShowCart } = useSelector((state) => state.app)
   return (
     <div className="font-main relative">
+      {isShowCart &&
+        <div className='absolute inset-0 bg-overlay z-50 flex justify-end' onClick={() => dispatch(showCart({ signal: false }))}>
+          <Cart></Cart>
+        </div>
+      }
       {isShowModal && <Modal>{modalChildren}</Modal>}
       <Routes>
         <Route path={path.PUBLIC} element={<Public />}>

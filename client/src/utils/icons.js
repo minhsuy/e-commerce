@@ -35,7 +35,11 @@ import { FaUserAlt } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa";
 import { MdFormatListBulletedAdd } from "react-icons/md";
 import { MdWorkHistory } from "react-icons/md";
+import { IoClose } from "react-icons/io5";
+import { IoIosCloseCircleOutline } from "react-icons/io";
 export const icons = {
+  IoIosCloseCircleOutline,
+  IoClose,
   MdFormatListBulletedAdd,
   MdWorkHistory,
   FaCartPlus,

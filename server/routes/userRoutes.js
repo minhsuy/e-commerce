@@ -9,6 +9,7 @@ import {
   logOut,
   refreshAccessToken,
   registerController,
+  removeProductInCart,
   resetPassword,
   updateCart,
   updateUser,
@@ -67,6 +68,8 @@ usersRouter.put("/address", verifyAccessToken, updateUserAddress);
 
 // update cart
 usersRouter.put("/cart", verifyAccessToken, updateCart);
+// remove cart
+usersRouter.delete("/remove-cart/:pid", verifyAccessToken, removeProductInCart);
 
 // update user : admin role
 usersRouter.put("/:uid", verifyAccessToken, isAdmin, updateUserByAdmin);

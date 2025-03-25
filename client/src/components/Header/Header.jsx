@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { memo } from 'react';
 import logo from '../../assets/logo.png'
 import { icons } from "../../utils/icons"
 import { Link } from 'react-router-dom';
 import path from '../../utils/path'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import withBaseComponent from '../../hocs/withBaseComponent';
+import { showCart } from '../../store/app/appSlice';
+import PropTypes from "prop-types";
 const Header = () => {
     const { FaPhoneAlt, MdEmail, FaShoppingCart, FaUserCircle, AiOutlineUser, IoBagHandleSharp } = icons
-
+    const dispatch = useDispatch()
     const { current } = useSelector((state) => state.user)
+    console.log(current)
     return (
         <div className='w-main h-[110px] py-[35px] flex justify-between' >
             <Link to={`/${path.HOME}`}>
@@ -30,9 +34,9 @@ const Header = () => {
                 </div>
                 {current &&
                     <>
-                        <div className='flex items-center justify-center gap-2 px-6 border-r cursor-pointer '>
+                        <div className='flex items-center justify-center gap-2 px-6 border-r cursor-pointer' onClick={() => dispatch(showCart({ signal: true }))}>
                             <IoBagHandleSharp className='text-main text-3xl'></IoBagHandleSharp>
-                            <span>0 item(s)</span>
+                            <span className='cursor-pointer hover:text-main'>{`${current?.cart?.length || 0}`} item(s)</span>
                         </div>
                         <Link to={current?.role === '0' ? `/${path.ADMIN}/${path.DASHBOARD}` : `/${path.MEMBER}/${path.PERSONAL}`} className='flex items-center justify-center px-6 gap-x-2 cursor-pointer hover:text-main'><img src={current?.avatar} className='w-[35px] h-[35px] rounded-full object-cover'></img>
                             <span className='text-base'>{current?.firstname} {current?.lastname}</span>
@@ -43,5 +47,7 @@ const Header = () => {
         </div>
     );
 };
-
-export default Header;
+Header.propTypes = {
+    dispatch: PropTypes.any
+}
+export default memo(Header);

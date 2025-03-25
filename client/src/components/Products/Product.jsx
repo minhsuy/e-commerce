@@ -9,12 +9,34 @@ import { icons } from "../../utils/icons";
 import { Link } from 'react-router-dom'
 import path from '../../utils/path'
 import withBaseComponent from "../../hocs/withBaseComponent";
+import { apiUpdateCart } from "../../apis/user";
+import { toast } from 'react-toastify'
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrent } from '../../store/user/asyncAction'
+import Swal from 'sweetalert2'
 const Product = ({ productData, tag, isCheck, normal, navigate }) => {
-    const { LuMenu, FaEye, FaHeart } = icons
+    const { LuMenu, FaEye, FaHeart, FaShoppingCart } = icons
     const [isShowOption, setIsShowOption] = useState(false)
-    const handleChooseOption = (e, action) => {
+    const dispatch = useDispatch()
+    const { current } = useSelector((state) => state.user)
+    const handleChooseOption = async (e, action) => {
         e.stopPropagation();
-        console.log(action)
+        if (action === 'cart') {
+            if (current === null) {
+                Swal.fire({ title: 'Đăng nhập  ? ', text: "Phải đăng nhập để thực hiện chức năng này ? ", icon: 'warning' }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate(`/${path.LOGIN}`)
+                    }
+                })
+                return
+            }
+            const response = await apiUpdateCart({ pid: productData?._id, color: productData?.color })
+            if (response.success) {
+                toast.success(response?.message)
+                dispatch(getCurrent())
+            }
+            else toast.error('Add product to cart failed !')
+        }
     }
     return (
         <div className="w-full text-base  px-[10px]">
@@ -31,16 +53,12 @@ const Product = ({ productData, tag, isCheck, normal, navigate }) => {
                 <div className="w-full relative">
                     {isShowOption && <div
                         className="absolute bottom-[-10px] left-0 right-0  flex justify-center gap-x-2 animate-slide-top">
-                        <div onClick={() => navigate(`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData.title}`)} >
-                            <SelectOption icon={<LuMenu></LuMenu>}></SelectOption>
+                        <div onClick={(e) => handleChooseOption(e, 'cart')} >
+                            <SelectOption icon={<FaShoppingCart></FaShoppingCart>}></SelectOption>
                         </div>
-
-                        <span onClick={(e) => handleChooseOption(e, 'quick_view')}>
-                            <SelectOption icon={<FaEye></FaEye>}></SelectOption>
-                        </span>
-                        <span onClick={(e) => handleChooseOption(e, 'wishlist')}>
+                        <div onClick={(e) => handleChooseOption(e, 'wishlist')}>
                             <SelectOption icon={<FaHeart></FaHeart>}></SelectOption>
-                        </span>
+                        </div>
                     </div>}
                     <img src={productData?.thumb} alt={productData?.title || "Product"} className="w-[243px] h-[243px] object-cover" />
                     {(isCheck || normal) ? "" : (
@@ -72,7 +90,8 @@ Product.propTypes = {
         tag: PropTypes.string,
         totalRatings: PropTypes.number,
         _id: PropTypes.number,
-        category: PropTypes.string
+        category: PropTypes.string,
+        color: PropTypes.string,
 
     }).isRequired,
     tag: PropTypes.string,
