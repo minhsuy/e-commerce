@@ -50,7 +50,8 @@ usersRouter.put("/resetpassword", resetPassword);
 // get all user : admin role
 
 usersRouter.get("/", verifyAccessToken, isAdmin, getUsers);
-
+// remove cart
+usersRouter.delete("/remove-cart", verifyAccessToken, removeProductInCart);
 // delete user : admin role
 usersRouter.delete("/:uid", verifyAccessToken, isAdmin, deleteUser);
 
@@ -68,8 +69,6 @@ usersRouter.put("/address", verifyAccessToken, updateUserAddress);
 
 // update cart
 usersRouter.put("/cart", verifyAccessToken, updateCart);
-// remove cart
-usersRouter.delete("/remove-cart/:pid", verifyAccessToken, removeProductInCart);
 
 // update user : admin role
 usersRouter.put("/:uid", verifyAccessToken, isAdmin, updateUserByAdmin);

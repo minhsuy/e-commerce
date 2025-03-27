@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { apiRegister, apiLogin, apiForgotPassword } from '../../apis/user';
 import path from '../../utils/path'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { login } from '../../store/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -20,7 +20,7 @@ import InputField from '../../components/Inputs/InputField';
 
 const Login = () => {
 
-
+    const [searchParams, setSearchParams] = useSearchParams()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [payload, setPayload] = useState({
@@ -78,7 +78,7 @@ const Login = () => {
                     dispatch(showModal({ isShowModal: false, modalChildren: null }))
                     Swal.fire({ icon: 'success', title: "Login successfully", text: result.message }).then(() => {
                         dispatch(login({ isLoggedIn: true, token: result.accessToken, userData: result.userData }))
-                        navigate(`/${path.HOME}`)
+                        searchParams?.get('redirect') ? navigate(searchParams.get('redirect')) : navigate(`/${path.HOME}`)
                     })
 
                 }

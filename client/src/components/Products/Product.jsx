@@ -6,7 +6,7 @@ import trending from '../../assets/trending.png';
 import { renderStarFromNumber } from "../../utils/renderToStar";
 import SelectOption from "../search/SelectOption";
 import { icons } from "../../utils/icons";
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import path from '../../utils/path'
 import withBaseComponent from "../../hocs/withBaseComponent";
 import { apiUpdateCart } from "../../apis/user";
@@ -30,7 +30,7 @@ const Product = ({ productData, tag, isCheck, normal, navigate }) => {
                 })
                 return
             }
-            const response = await apiUpdateCart({ pid: productData?._id, color: productData?.color })
+            const response = await apiUpdateCart({ pid: productData?._id, color: productData?.color, category: productData?.category?.toLowerCase() })
             if (response.success) {
                 toast.success(response?.message)
                 dispatch(getCurrent())

@@ -65,7 +65,7 @@ const DealDaily = () => {
                 </span>
                 <span className='font-bold text-[17px] text-center text-gray-800'>DAILY DEALS</span>
             </div>
-            {dailyDeal && <Link to={`/${dailyDeal?.category?.toLowerCase()}/${dailyDeal?._id}/${dailyDeal.title}`}>
+            {dailyDeal && <Link to={`/${dailyDeal?.category?.toLowerCase()}/${dailyDeal?._id}/${dailyDeal?.title}`}>
                 <div className='w-full flex flex-col items-center pt-8 cursor-pointer' key={dailyDeal?._id}>
                     <img src={dailyDeal?.thumb} key={dailyDeal?._id} alt={dailyDeal?.title || "Product"} className="w-full object-contain" />
                     <div className='flex items-center justify-center flex-col gap-y-2 relative top-[-20px] mt-8'>
@@ -84,7 +84,8 @@ const DealDaily = () => {
                 </div>
                 <button type='button' className='w-full flex gap-x-2 items-center justify-center bg-main hover:bg-slate-700 text-white font-medium rounded-sm text-center py-3'>
                     <LuMenu></LuMenu>
-                    <span >OPTIONS</span>
+                    <Link to={`/${dailyDeal?.category?.toLowerCase()}/${dailyDeal?._id}/${dailyDeal?.title}`}>
+                        <span >OPTIONS</span></Link>
                 </button>
             </div>
         </div>

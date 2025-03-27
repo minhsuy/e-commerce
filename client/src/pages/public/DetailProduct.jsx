@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation, createSearchParams, useSearchParams } from 'react-router-dom';
 import { apiGetProduct, apiGetProducts } from '../../apis/product'
 import Slider from 'react-slick';
 import ReactImageMagnify from 'react-image-magnify';
@@ -14,6 +14,12 @@ import SelectQuantity from '../../components/common/SelectQuantity';
 import ProductExtraInfoItem from '../../components/Products/ProductExtraInfoItem';
 import ProductInfomation from '../../components/Products/ProductInfomation';
 import DOMPurify from 'dompurify';
+import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
+import path from '../../utils/path';
+import { apiUpdateCart } from '../../apis/user';
+import { toast } from 'react-toastify';
+import { getCurrent } from '../../store/user/asyncAction';
 
 const settings = {
     dots: false,
@@ -24,6 +30,10 @@ const settings = {
 };
 
 const DetailProduct = () => {
+    const { current } = useSelector((state) => state.user)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const location = useLocation()
     const { pid, title, category } = useParams()
     const [product, setProduct] = useState(null)
     const [productCategory, setProductCategory] = useState(null)
@@ -36,6 +46,7 @@ const DetailProduct = () => {
         price: 0,
         thumb: '',
         images: [],
+        color: ''
     })
     const rerender = useCallback(() => {
         setUpdate(!update)
@@ -58,18 +69,23 @@ const DetailProduct = () => {
             price: product?.varriants?.find((item) => item.sku === varriants)?.price,
             thumb: product?.varriants?.find((item) => item.sku === varriants)?.thumb,
             images: product?.varriants?.find((item) => item.sku === varriants)?.images,
+            color: product?.varriants?.find((item) => item.sku === varriants)?.color,
         })
         else setCurrentProduct({
             title: '',
             price: 0,
             thumb: '',
             images: [],
+            color: ''
         })
     }, [varriants])
     const handleSetImage = useCallback((item) => {
         setImg(item)
     }, [img])
-    const handleChangeQuantity = useCallback((status) => {
+    const handleQuantity = (number) => {
+        if (+number > 1) setQuantity(number)
+    }
+    const handleChangeQuantity = (status) => {
         if (status === 'minus') {
             if (quantity <= 1) {
                 setQuantity(1)
@@ -79,7 +95,27 @@ const DetailProduct = () => {
             }
         }
         else setQuantity(prev => prev + 1)
-    }, [quantity])
+    }
+    const handleAddProductToCart = async () => {
+        if (current === null) {
+            Swal.fire({ title: 'Đăng nhập  ? ', text: "Phải đăng nhập để thực hiện chức năng này ? ", icon: 'warning' }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate({
+                        pathname: `/${path.LOGIN}`,
+                        search: createSearchParams({ redirect: location.pathname }).toString()
+                    })
+                }
+            })
+            return
+        }
+        const response = await apiUpdateCart({ pid, color: currentProduct?.color || (product?.color === 'N/A' ? 'BLACK' : product?.color), quantity, price: currentProduct?.price || product?.price, thumbnail: currentProduct?.thumb || product?.thumb, title: currentProduct?.title || product?.title, category })
+        if (response.success) {
+            toast.success(response?.message)
+            dispatch(getCurrent())
+            setQuantity(1)
+        }
+        else toast.error('Add product to cart failed !')
+    }
     return (
         <div className='w-full'>
             <div className='h-[81px] bg-gray-100'>
@@ -176,7 +212,7 @@ const DetailProduct = () => {
                             <span className='text-lg font-medium'>Quantity : </span>
                             <SelectQuantity quantity={quantity} handleChangeQuantity={handleChangeQuantity}></SelectQuantity>
                         </div>
-                        <Button type={'button'} style={'w-full bg-main text-white'} >Add to cart</Button>
+                        <Button type={'button'} style={'w-full bg-main text-white'} handleOnClick={handleAddProductToCart} >Add to cart</Button>
                     </div>
                 </div>
                 <div className='w-1/5'>

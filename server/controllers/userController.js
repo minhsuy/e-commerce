@@ -293,7 +293,15 @@ export const updateUserAddress = asyncHandler(async (req, res) => {
 });
 export const updateCart = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { pid, quantity = 1, color } = req.body;
+  const {
+    pid,
+    quantity = 1,
+    color,
+    price,
+    title,
+    thumbnail,
+    category,
+  } = req.body;
   if (!pid || !quantity || !color) throw new Error("Missing inputs");
 
   const user = await User.findById(_id);
@@ -302,14 +310,13 @@ export const updateCart = asyncHandler(async (req, res) => {
   const productExistingOnCart = user?.cart?.find(
     (item) => item.product.toString() === pid
   );
-
   if (productExistingOnCart) {
     if (productExistingOnCart.color === color) {
       const response = await User.findOneAndUpdate(
         { _id, "cart.product": pid, "cart.color": productExistingOnCart.color },
         {
           $set: {
-            "cart.$.quantity": quantity + productExistingOnCart.quantity,
+            "cart.$.quantity": quantity,
           },
         },
         { new: true }
@@ -323,7 +330,17 @@ export const updateCart = asyncHandler(async (req, res) => {
       const response = await User.findByIdAndUpdate(
         _id,
         {
-          $push: { cart: { product: pid, quantity, color } },
+          $push: {
+            cart: {
+              product: pid,
+              color,
+              quantity,
+              price,
+              title,
+              thumbnail,
+              category,
+            },
+          },
         },
         { new: true }
       );
@@ -337,7 +354,17 @@ export const updateCart = asyncHandler(async (req, res) => {
     const response = await User.findByIdAndUpdate(
       _id,
       {
-        $push: { cart: { product: pid, quantity, color } },
+        $push: {
+          cart: {
+            product: pid,
+            quantity,
+            color,
+            price,
+            title,
+            thumbnail,
+            category,
+          },
+        },
       },
       { new: true }
     );
@@ -351,10 +378,15 @@ export const updateCart = asyncHandler(async (req, res) => {
 
 export const removeProductInCart = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { pid } = req.params;
+  const { pid, color } = req.body;
+  if (!pid || !color) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Missing product ID or color" });
+  }
   const user = await User.findById(_id).select("cart");
   const productExistingOnCart = user?.cart?.find(
-    (item) => item.product.toString() === pid
+    (item) => item.product.toString() === pid && item.color === color
   );
   // not find a product on cart
   if (!productExistingOnCart) {
@@ -365,7 +397,7 @@ export const removeProductInCart = asyncHandler(async (req, res) => {
   }
   const response = await User.findByIdAndUpdate(
     _id,
-    { $pull: { cart: { product: pid } } },
+    { $pull: { cart: { product: pid, color } } },
     { new: true }
   );
   return res.status(200).json({

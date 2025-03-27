@@ -12,6 +12,7 @@ const path = {
   DETAIL_PRODUCT__CATEGORY__PID__TITLE: ":category/:pid/:title",
   FINAL_REGISTER: "finalregister/:status",
   RESET_PASSWORD: "reset-password/:token",
+  DETAIL_CART: "my-cart",
 
   // admin
   ADMIN: "admin",
@@ -28,6 +29,7 @@ const path = {
   MY_CART: "my-cart",
   HISTORY: "buy-history",
   WISHLIST: "wishlist",
+  CHECKOUT: "checkout",
 };
 
 export default path;

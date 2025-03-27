@@ -4,8 +4,11 @@ import PropTypes from 'prop-types'
 import { voteOptions } from '../../utils/constant';
 import { icons } from '../../utils/icons';
 import Button from '../Button/Button';
-const { FaStar } = icons
+import { showModal } from '../../store/app/appSlice'
+import { useDispatch } from 'react-redux';
+const { FaStar, IoClose } = icons
 const VoteOption = ({ productName, handleSubmitVoteOption }) => {
+    const dispatch = useDispatch()
     const [chosenScore, setChosenScore] = useState(null)
     const [comment, setCommnent] = useState('')
     const handleChosenScore = (id) => {
@@ -17,8 +20,11 @@ const VoteOption = ({ productName, handleSubmitVoteOption }) => {
         voteRef.current.scrollIntoView({ block: 'center', behavior: "smooth" })
     }, [])
     return (
-        <div onClick={(e) => e.stopPropagation()} ref={voteRef} className='w-[700px] h-[400px] rounded-md bg-white flex flex-col gap-y-4 p-4 justify-center items-center'>
+        <div onClick={(e) => e.stopPropagation()} ref={voteRef} className='w-[700px] h-[400px] rounded-md relative bg-white flex flex-col gap-y-4 border  justify-center items-center z-[10000]'>
             <img src={logo} alt="logo" className='w-[300px] object-contain' />
+            <span className='absolute right-0 top-0 p-1 rounded-lg bg-slate-200 text-main cursor-pointer hover:text-white hover:bg-main' onClick={() => dispatch(showModal({ isShowModal: false, modalChildren: null }))}>
+                <IoClose size={30}></IoClose>
+            </span>
             <h2 className='text-center text-lg font-medium'>{`Đánh giá sản phẩm : ${productName}`}</h2>
             <textarea className='w-3/4 p-4 py-4 rounded-md resize-none border border-gray-300 outline-none focus:border focus:border-gray-500' placeholder='Xin mời bạn nhận xét , góp ý về sản phẩm !' onChange={(e) => setCommnent(e.target.value)} ></textarea>
             <div className='w-full flex flex-col gap-4'>

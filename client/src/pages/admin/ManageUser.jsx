@@ -104,11 +104,11 @@ const ManageUser = () => {
                                     {/* lastname */}
                                     <td className='py-2 px-4'> {editElement?._id === item?._id ? <InputForms register={register} validate={{ required: 'Lastname is required' }} placeholder={'Lastname'} id={'lastname'} value={editElement?.lastname} errors={errors}></InputForms> : <span>{item?.lastname} </span>}</td>
                                     {/* role */}
-                                    <td className='py-2 px-4'>{editElement?._id === item?._id ? <Select register={register} errors={errors} value={+item.role} id={'role'} option={roles}></Select> : <span>{roles?.find((el) => el.code === +item?.role).value}</span>}</td>
+                                    <td className='py-2 px-4'>{editElement?._id === item?._id ? <Select register={register} errors={errors} id={'role'} option={roles} ></Select> : <span>{roles?.find((el) => el.code === +item?.role).value}</span>}</td>
 
                                     {/* mobile */}
 
-                                    <td className='py-2 px-4'> {editElement?._id === item?._id ? <InputForms register={register} validate={{
+                                    <td className='py-2 px-4' > {editElement?._id === item?._id ? <InputForms register={register} validate={{
                                         required: 'Mobile is required',
                                         pattern: {
                                             value: /^[62|0]+\d{9}/gi,
@@ -117,7 +117,7 @@ const ManageUser = () => {
                                     }} placeholder={'Mobile'} id={'mobile'} value={editElement?.mobile} errors={errors}></InputForms> : <span>{item?.mobile} </span>}</td>
                                     {/* isBlocked */}
 
-                                    <td className='py-2 px-4'>{editElement?._id === item?._id ? <Select register={register} errors={errors} value={item.isBlocked} id={'isBlocked'} option={activeStatus}></Select> : <span>{item?.isBlocked ? 'Blocked' : 'Active'}</span>}</td>
+                                    <td className='py-2 px-4'>{editElement?._id === item?._id ? <Select register={register} errors={errors} id={'isBlocked'} option={activeStatus}></Select> : <span>{item?.isBlocked ? 'Blocked' : 'Active'}</span>}</td>
                                     <td className=''>{moment(item?.createdAt).format("DD/MM/YYYY HH:mm:ss")}</td>
 
 
@@ -132,9 +132,9 @@ const ManageUser = () => {
                     </table>
                 </form>
 
-            </div>
+            </div >
 
-        </div>
+        </div >
     );
 };
 

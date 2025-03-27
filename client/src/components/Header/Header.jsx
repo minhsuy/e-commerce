@@ -11,7 +11,6 @@ const Header = () => {
     const { FaPhoneAlt, MdEmail, FaShoppingCart, FaUserCircle, AiOutlineUser, IoBagHandleSharp } = icons
     const dispatch = useDispatch()
     const { current } = useSelector((state) => state.user)
-    console.log(current)
     return (
         <div className='w-main h-[110px] py-[35px] flex justify-between' >
             <Link to={`/${path.HOME}`}>
