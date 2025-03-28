@@ -45,6 +45,7 @@ function App() {
       }
       {isShowModal && <Modal>{modalChildren}</Modal>}
       <Routes>
+        <Route path={path.CHECKOUT} element={<Checkout />}></Route>
         <Route path={path.PUBLIC} element={<Public />}>
           {/* public */}
           <Route path={path.HOME} element={<Home />}></Route>
@@ -54,7 +55,6 @@ function App() {
           <Route path={path.FAQ} element={<FAQ />}></Route>
           <Route path={path.OUR_SERVICES} element={<Services />}></Route>
           <Route path={path.RESET_PASSWORD} element={<ResetPassword />}></Route>
-          {/* <Route path={path.DETAIL_CART} element={<DetailCart />}></Route> */}
           <Route path={"*"} element={<Home />}></Route>
         </Route>
         {/* admin */}
@@ -72,7 +72,6 @@ function App() {
           <Route path={path.HISTORY} element={<History />}></Route>
           <Route path={path.MY_CART} element={<DetailCart />}></Route>
           <Route path={path.WISHLIST} element={<Wishlist />}></Route>
-          <Route path={path.CHECKOUT} element={<Checkout />}></Route>
         </Route>
         {/* member */}
         <Route path={path.FINAL_REGISTER} element={<FinalRegister />}></Route>

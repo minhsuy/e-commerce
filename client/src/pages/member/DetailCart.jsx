@@ -57,7 +57,7 @@ const DetailCart = () => {
                         <span>{formatMoney(formatPrice(current?.cart?.reduce((sum, item) => sum + Number(item?.price || item?.product?.price) * Number(item?.quantity), 0)))} VNĐ</span>
                     </div>
                     <div>
-                        <Button style={`bg-red-500 w-[200px]`} handleOnClick={() => navigate(`/${path.MEMBER}/${path.CHECKOUT}`)}>Check out</Button>
+                        <Button style={`bg-red-500 w-[200px]`} handleOnClick={() => navigate(`/${path.CHECKOUT}`)}>Check out</Button>
                     </div>
                 </div>
             </div>

@@ -76,3 +76,10 @@ export const apiRemoveCart = (data) => {
     data,
   });
 };
+export const apiCreateOrder = (data) => {
+  return axios({
+    method: "POST",
+    url: "/order",
+    data,
+  });
+};

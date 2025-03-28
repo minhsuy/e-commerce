@@ -37,7 +37,11 @@ import { MdFormatListBulletedAdd } from "react-icons/md";
 import { MdWorkHistory } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { IoIosArrowRoundBack } from "react-icons/io";
+import { IoReturnUpBack } from "react-icons/io5";
 export const icons = {
+  IoReturnUpBack,
+  IoIosArrowRoundBack,
   IoIosCloseCircleOutline,
   IoClose,
   MdFormatListBulletedAdd,

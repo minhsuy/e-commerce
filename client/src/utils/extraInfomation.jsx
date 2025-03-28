@@ -37,7 +37,7 @@ export const extraInfomation = [
 ];
 
 
-const { MdOutlineDashboard, MdOutlineGroups, RiProductHuntLine, CiMoneyBill, MdWorkHistory
+const { MdOutlineDashboard, MdOutlineGroups, RiProductHuntLine, CiMoneyBill, MdWorkHistory, IoIosArrowRoundBack, IoReturnUpBack
 } = icons
 export const adminSidebar = [
     {
@@ -108,6 +108,13 @@ export const memberSidebar = [
         text: 'Buy History',
         path: `/${path.MEMBER}/${path.HISTORY}`,
         icon: <MdWorkHistory></MdWorkHistory>
+    },
+    {
+        id: 4,
+        type: 'SINGLE',
+        text: 'Go Home',
+        path: `/${path.HOME}`,
+        icon: <IoReturnUpBack></IoReturnUpBack>
     },
 
 ];

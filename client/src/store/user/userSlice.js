@@ -23,7 +23,6 @@ export const userSlice = createSlice({
     clearMessage: (state, action) => {
       state.mes = "";
     },
-    updateCart: (state, action) => {},
   },
   extraReducers: (builder) => {
     builder.addCase(getCurrent.pending, (state, action) => {

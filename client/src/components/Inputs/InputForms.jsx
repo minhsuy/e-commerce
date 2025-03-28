@@ -12,7 +12,7 @@ const InputForms = ({ label, disabled, register, errors, id, validate, type = 't
                 disabled={disabled}
                 onChange={onChange}
                 placeholder={placeholder}
-                defaultValue={value}
+                value={value}
                 readOnly={readOnly}
                 className={`${className} px-4 py-2 rounded-md ${readOnly ? '' : 'focus:border focus:border-main'} outline-none border border-gray-300`}
             />

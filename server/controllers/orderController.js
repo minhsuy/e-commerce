@@ -8,41 +8,20 @@ import Coupon from "../models/couponModel.js";
 dotenv.config();
 export const createOrder = asyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { coupon } = req.body;
-  const user = await User.findById(_id).select("cart").populate("cart.product");
-  if (!user) throw new Error("User not found , can not create a bill !");
-  const products = user?.cart?.map((item) => ({
-    product: item.product._id,
-    count: item.quantity,
-    color: item.color,
-    price: item.product.price,
-  }));
-  if (!products) throw new Error("Not found item on cart !");
-  let total = user?.cart.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0
-  );
-  if (coupon) {
-    const checkCoupon = await Coupon.findOne({ name: coupon });
-    if (!checkCoupon) throw new Error("Coupon not found!");
-    if (Date.now() > checkCoupon.expiry) throw new Error("Coupon has expired!");
-    total =
-      Math.round((total * (1 - +checkCoupon.discount / 100)) / 1000) * 1000;
-    const response = await Order.create({
-      products,
-      total,
-      orderBy: _id,
-      coupon: checkCoupon._id,
-    });
-    return res.status(200).json({
-      message: response ? true : false,
-      response,
-    });
-  }
-  const response = await Order.create({ products, total, orderBy: _id });
+  const { products, total, address, status } = req.body;
+  if (address) await User.findByIdAndUpdate(_id, { address, cart: [] });
+  const user = await User.findById(_id);
+  if (!user) throw new Error("Cart is empty , can not create a order !");
+  const rs = await Order.create({
+    products,
+    total,
+    orderBy: _id,
+    address,
+    status,
+  });
   return res.status(200).json({
-    message: response ? true : false,
-    response,
+    message: rs ? true : false,
+    rs: rs,
   });
 });
 export const updateStatusOrder = asyncHandler(async (req, res) => {
