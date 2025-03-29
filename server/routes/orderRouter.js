@@ -14,11 +14,10 @@ orderRouter.post("/", verifyAccessToken, createOrder);
 // updated status order
 
 orderRouter.put("/status/:oid", verifyAccessToken, isAdmin, updateStatusOrder);
+// get order by admin
+orderRouter.get("/admin", verifyAccessToken, isAdmin, getOrderByAdmin);
 
 // get order
 orderRouter.get("/", verifyAccessToken, getUserOrder);
-
-// get order by admin
-orderRouter.get("/admin", verifyAccessToken, isAdmin, getOrderByAdmin);
 
 export default orderRouter;

@@ -83,3 +83,17 @@ export const apiCreateOrder = (data) => {
     data,
   });
 };
+export const apiGetOrder = (params) => {
+  return axios({
+    method: "GET",
+    url: "/order/",
+    params,
+  });
+};
+export const apiGetOrders = (params) => {
+  return axios({
+    method: "GET",
+    url: "/order/admin",
+    params,
+  });
+};
